@@ -7,5 +7,5 @@ for n in range(1, 11):
     rx = random.randint(-5, 5)
     ry = random.randint(-5, 5)
     print(f' {n}.)   {rx}, {ry}')
-    pag.moveTo(900 + rx, 900 + ry)
+    pag.moveTo(1920/2 + rx, 540 + ry)
     time.sleep(.25)

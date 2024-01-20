@@ -47,26 +47,26 @@ def p(a=-3, b=3):  # Define function and define numbers
 
 def shift_camera_direction(direction='north'):
     pag.FAILSAFE = True  # Turn on failsafe
-    pag.moveTo(1725 + p(-5, 5), 52 + p(-5, 5), r())
+    pag.moveTo(1725 + p(-8, 8), 52 + p(-8, 8), r(0.75, 0.90))
     time.sleep(r(0.15, 0.80))
     if direction == 'north':
         pag.click()
-    if direction == 'east':
+    elif direction == 'east':
         pag.rightClick()
         time.sleep(r(0.10, 0.30))
-        pag.move(0, 42 + p(), r())
+        pag.move(0 + p(-5, 5), 42 + p(), r(0.75, 0.90))
         time.sleep(r(0.10, 0.30))
         pag.click()
-    if direction == 'south':
+    elif direction == 'south':
         pag.rightClick()
         time.sleep(r(0.10, 0.30))
-        pag.move(0, 57 + p(), r())
+        pag.move(0 + p(-5, 5), 57 + p(), r(0.75, 0.90))
         time.sleep(r(0.10, 0.30))
         pag.click()
-    if direction == 'west':
+    elif direction == 'west':
         pag.rightClick()
         time.sleep(r(0.10, 0.30))
-        pag.move(0, 72 + p(), r())
+        pag.move(0 + p(-5, 5), 72 + p(), r(0.75, 0.90))
         time.sleep(r(0.10, 0.30))
         pag.click()
     time.sleep(r(0.25, 1.5))

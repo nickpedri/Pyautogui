@@ -30,31 +30,51 @@ def press(key, how_long):
     pag.keyUp(key)  # Release key
 
 
-countdown(1)
 #test_mouse_move()
 #press('Up', 1)
 #press('right', 1)
 
 
-def r(a=0.55, b=0.75):
-    return random.uniform(a, b)
+# Create a function to generate a random number between a and b
+def r(a=0.55, b=0.75):  # Define function and define numbers
+    return random.uniform(a, b)  # Return numbers
 
 
-def p(a, b):
-    return random.randint(a, b)
+# Create function to return random integers between a and b
+def p(a=-3, b=3):  # Define function and define numbers
+    return random.randint(a, b)  # Return integers
+
 
 def shift_camera_direction(direction='north'):
-    if direction is 'north':
-        pag.click(1725)
-    pag.rightClick(1725, 52)
-    time.sleep(r())
-    print(r())
-    pag.move(0, 15, r())
-    print(r())
-    pag.move(0, 15, r())
-    print(r())
-    pag.move(0, 15, r())
-    print(r())
+    pag.FAILSAFE = True  # Turn on failsafe
+    pag.moveTo(1725 + p(-5, 5), 52 + p(-5, 5), r())
+    time.sleep(r(0.15, 0.80))
+    if direction == 'north':
+        pag.click()
+    if direction == 'east':
+        pag.rightClick()
+        time.sleep(r(0.10, 0.30))
+        pag.move(0, 42 + p(), r())
+        time.sleep(r(0.10, 0.30))
+        pag.click()
+    if direction == 'south':
+        pag.rightClick()
+        time.sleep(r(0.10, 0.30))
+        pag.move(0, 57 + p(), r())
+        time.sleep(r(0.10, 0.30))
+        pag.click()
+    if direction == 'west':
+        pag.rightClick()
+        time.sleep(r(0.10, 0.30))
+        pag.move(0, 72 + p(), r())
+        time.sleep(r(0.10, 0.30))
+        pag.click()
+    time.sleep(r(0.25, 1.5))
 
 
-shift_camera_direction()
+countdown(3)
+
+directions = ['north', 'east', 'south', 'west']
+for d in directions:
+    shift_camera_direction(d)
+

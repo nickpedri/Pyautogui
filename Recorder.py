@@ -1,3 +1,4 @@
+import os
 from pynput import mouse, keyboard
 from time import time
 import json
@@ -94,6 +95,11 @@ def main():
     print(f'Recording duration: {elapsed_time()} seconds')
     global input_events
     print(json.dumps(input_events))
+
+    script_dir = os.path.dirname('Recordings')
+    filepath = os.path.join(script_dir, 'recordings', f'{OUTPUT_FILENAME}.json')
+    with open(filepath, 'w') as outfile:
+        json.dump(input_events, outfile, indent=4)
 
 
 if __name__ == "__main__":

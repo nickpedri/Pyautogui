@@ -3,6 +3,11 @@ import random  # Use random to add randomness to movements
 import time  # Use time to time mouse movements
 
 
+def initialize_pag():
+    pag.FAILSAFE = True  # Turn on failsafe
+    print('Pyautogui failsafe enabled!')
+
+
 # Create a simple countdown loop
 def countdown(seconds=10):
     print(f'Starting', end='')
@@ -15,7 +20,6 @@ def countdown(seconds=10):
 # Create loop that will repeat 10 times to test simple mouse movement
 def test_mouse_move():
     for n in range(1, 6):
-        pag.FAILSAFE = True  # Turn on failsafe
         rx = random.randint(-10, 10)  # Create x variable randomness
         ry = random.randint(-10, 10)  # Create y variable randomness
         print(f' {n}.)   {rx}, {ry}')  # Print x and y randomness
@@ -46,7 +50,6 @@ def p(a=-3, b=3):  # Define function and define numbers
 
 
 def shift_camera_direction(direction='north'):
-    pag.FAILSAFE = True  # Turn on failsafe
     pag.moveTo(1725 + p(-8, 8), 52 + p(-8, 8), r(0.75, 0.90))
     time.sleep(r(0.15, 0.80))
     if direction == 'north':
@@ -73,7 +76,7 @@ def shift_camera_direction(direction='north'):
 
 
 countdown(3)
-
+initialize_pag()
 directions = ['north', 'east', 'south', 'west']
 for d in directions:
     shift_camera_direction(d)

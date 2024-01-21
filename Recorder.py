@@ -58,7 +58,7 @@ def on_release(key):
     except AttributeError:
         record_event(EventType.KEYUP, elapsed_time(), key)
 
-    if key == keyboard.Key.esc:
+    if key == keyboard.Key.f10:
         # Stop mouse listener
         mouse_listener.stop()
         # Stop keyboard listener

@@ -22,8 +22,27 @@ def play_actions(filename):
     filepath = os.path.join(script_dir, 'recordings', filename)
     with open(filepath, 'r') as jsonfile:
         data = json.load(jsonfile)
-        print(data)
+        for index, action in enumerate(data):
+            if action['button'] == 'Key.esc':
+                break
+            # Perform action
+            if action['type'] == 'KeyDown':
+                pag.KeyDown(action['button'])
+            elif action['type'] == 'KeyUp':
+                pag.KeyUp(action['button'])
+            elif action['type'] == 'click':
+                pag.click(action['pos'][0], action['pos'][1], duration=0.25)
 
+            # Sleep until next action
+            try:
+                next_action = data[index + 1]
+            except IndexError:
+                break
+            elapsed_time = next_action['time'] - action['time']
+            if elapsed_time >= 0:
+                time.sleep(elapsed_time)
+            else:
+                raise Exception('Unexpected action ordering.')
 
 def main():
     countdown(3)

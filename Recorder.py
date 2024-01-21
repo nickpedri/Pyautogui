@@ -13,12 +13,15 @@ start_time = None
 unreleased_keys = []
 # Storing all input events
 input_events = []
+# Store click event
+unreleased_click = False
 
 
 class EventType:
     KEYDOWN = 'keyDown'
     KEYUP = 'keyUp'
-    CLICK = 'click'
+    CLICKDOWN = 'clickDown'
+    CLICKUP = 'clickUp'
 
 
 def record_event(event_type, event_time, button, pos=None):
@@ -27,7 +30,7 @@ def record_event(event_type, event_time, button, pos=None):
                          'type': event_type,
                          'button': str(button),
                          'pos': pos})
-    if event_type == EventType.CLICK:
+    if event_type == EventType.CLICKDOWN or event_type == EventType.CLICKUP:
         print(f'{event_type} on {button} pos {pos} at {event_time}')
     else:
         print(f'{event_type} on {button} at {event_time}')
@@ -67,8 +70,10 @@ def on_release(key):
 
 
 def on_click(x, y, button, pressed):
+    if pressed:
+        record_event(EventType.CLICKDOWN, elapsed_time(), button, (x, y))
     if not pressed:
-        record_event(EventType.CLICK, elapsed_time(), button, (x, y))
+        record_event(EventType.CLICKUP, elapsed_time(), button, (x, y))
 
 
 def run_listeners():

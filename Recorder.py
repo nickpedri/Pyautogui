@@ -96,7 +96,7 @@ def main():
     global input_events
     print(json.dumps(input_events))
 
-    script_dir = os.path.dirname('Recordings')
+    script_dir = os.path.dirname(__file__)
     filepath = os.path.join(script_dir, 'recordings', f'{OUTPUT_FILENAME}.json')
     with open(filepath, 'w') as outfile:
         json.dump(input_events, outfile, indent=4)

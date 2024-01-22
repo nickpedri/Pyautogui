@@ -22,6 +22,7 @@ class EventType:
     KEYUP = 'keyUp'
     CLICKDOWN = 'clickDown'
     CLICKUP = 'clickUp'
+    MOUSEMOVE = 'moveTo'
 
 
 def record_event(event_type, event_time, button, pos=None):

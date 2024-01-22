@@ -5,6 +5,13 @@ import json
 
 # Declare mouse_listener globally so that keyboard on release can stop it
 # mouse_listener = None
+# Declare start_time globally so that the callback functions can reference it
+start_time = None
+
+
+def elapsed_time():
+    global start_time
+    return time() - start_time
 
 
 def press_release(press):
@@ -13,7 +20,7 @@ def press_release(press):
 
 
 def on_click(x, y, button, pressed):
-    print(f'{button} {press_release(pressed)} at {(x, y)}')
+    print(f'{button} {press_release(pressed)} on {(x, y)} at {elapsed_time()}')
 
 
 def on_press(key):
@@ -38,8 +45,8 @@ def run_listeners():
     mouse_listener.wait()
 
     with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
-        # global start_time
-        # start_time = time()
+        global start_time
+        start_time = time()
         listener.join()
 
 

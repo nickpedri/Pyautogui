@@ -1,78 +1,192 @@
 [
     {
-        "time": 0.8044438362121582,
+        "time": 1.368732213973999,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            561,
+            1821,
+            764
+        ]
+    },
+    {
+        "time": 1.4442381858825684,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1821,
+            764
+        ]
+    },
+    {
+        "time": 1.5389626026153564,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1821,
+            764
+        ]
+    },
+    {
+        "time": 1.6332781314849854,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1821,
+            764
+        ]
+    },
+    {
+        "time": 2.0712673664093018,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1827,
+            804
+        ]
+    },
+    {
+        "time": 2.1421048641204834,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1827,
+            804
+        ]
+    },
+    {
+        "time": 2.24283766746521,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1827,
+            804
+        ]
+    },
+    {
+        "time": 2.322260618209839,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1827,
+            804
+        ]
+    },
+    {
+        "time": 2.8299338817596436,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1827,
             833
         ]
     },
     {
-        "time": 3.474202871322632,
+        "time": 2.8992910385131836,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            874,
-            899
+            1827,
+            833
         ]
     },
     {
-        "time": 8.71884560585022,
+        "time": 2.9810373783111572,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            874,
-            899
+            1827,
+            833
         ]
     },
     {
-        "time": 8.976372480392456,
+        "time": 3.0663187503814697,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            874,
-            899
+            1827,
+            833
         ]
     },
     {
-        "time": 9.772261619567871,
+        "time": 3.5629024505615234,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            874,
-            899
+            1784,
+            840
         ]
     },
     {
-        "time": 9.808605432510376,
+        "time": 3.6409828662872314,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            874,
-            899
+            1784,
+            840
         ]
     },
     {
-        "time": 11.024254322052002,
-        "type": "keyDown",
-        "button": "Key.esc",
-        "pos": null
+        "time": 3.727261543273926,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1784,
+            840
+        ]
     },
     {
-        "time": 11.155315637588501,
-        "type": "keyUp",
-        "button": "Key.esc",
-        "pos": null
+        "time": 3.8080453872680664,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1784,
+            840
+        ]
     },
     {
-        "time": 12.642433404922485,
+        "time": 4.147138595581055,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1786,
+            801
+        ]
+    },
+    {
+        "time": 4.224933385848999,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1786,
+            801
+        ]
+    },
+    {
+        "time": 4.322185039520264,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1786,
+            801
+        ]
+    },
+    {
+        "time": 4.390512704849243,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1786,
+            801
+        ]
+    },
+    {
+        "time": 7.354327201843262,
         "type": "keyDown",
         "button": "Key.f10",
         "pos": null
     },
     {
-        "time": 12.717381954193115,
+        "time": 7.465912103652954,
         "type": "keyUp",
         "button": "Key.f10",
         "pos": null

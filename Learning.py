@@ -80,4 +80,3 @@ initialize_pag()
 directions = ['north', 'east', 'south', 'west']
 for d in directions:
     shift_camera_direction(d)
-

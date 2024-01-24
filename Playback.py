@@ -36,18 +36,17 @@ def play_actions(filename):
                 key = action['button']
                 key = key[4:] if key[:4] == 'Key.' else key
                 pag.keyDown(key)
+
             elif action['type'] == 'clickDown':
                 previous_position = (action['pos'][0], action['pos'][1])
                 pag.moveTo(action['pos'][0] + p(), action['pos'][1] + p(), duration=r(0.25, 0.70))
                 pag.mouseDown()
             elif action['type'] == 'clickUp':
-                print(previous_position)
                 if previous_position == (action['pos'][0], action['pos'][1]):
-                    pag.mouseUp(action['pos'][0], action['pos'][1])
-                # pag.moveTo(action['pos'][0], action['pos'][1], duration=0.25)
+                    pag.mouseUp()
                 else:
-                    pag.moveTo(action['pos'][0], action['pos'][1], duration=r(0.25, 1.00))
-                    pag.mouseUp(action['pos'][0], action['pos'][1])
+                    pag.moveTo(action['pos'][0] + p(), action['pos'][1] + p(), duration=r(0.25, 1.00))
+                    pag.mouseUp()
 
             # Sleep until next action
             try:

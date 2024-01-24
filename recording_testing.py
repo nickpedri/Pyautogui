@@ -54,7 +54,7 @@ def run_listeners():
 # run_listeners()
 
 
-def test_click_speed(x=1, coordinates=(1000, 500)):
+def test_click_speed(coordinates=None, x=1):
     if x == 1:
         pag.mouseDown(coordinates)
         pag.mouseUp(coordinates)
@@ -67,4 +67,4 @@ def test_click_speed(x=1, coordinates=(1000, 500)):
         # Testing shows this action takes around .09s
 
 
-test_click_speed(1, (1697, 771))
+test_click_speed()

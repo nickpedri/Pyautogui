@@ -2,6 +2,7 @@ import pyautogui as pag
 import time
 import os
 import json
+from randomizers import p, r
 
 
 def initialize_pag():
@@ -18,6 +19,7 @@ def countdown(seconds=10):
 
 
 def play_actions(filename):
+    previous_position = None
     script_dir = os.path.dirname(__file__)
     filepath = os.path.join(script_dir, 'recordings', filename)
     with open(filepath, 'r') as jsonfile:
@@ -35,14 +37,16 @@ def play_actions(filename):
                 key = key[4:] if key[:4] == 'Key.' else key
                 pag.keyDown(key)
             elif action['type'] == 'clickDown':
-                pag.moveTo(action['pos'][0], action['pos'][1], duration=0.25)
-                pag.mouseDown(action['pos'][0], action['pos'][1])
+                previous_position = (action['pos'][0], action['pos'][1])
+                pag.moveTo(action['pos'][0] + p(), action['pos'][1] + p(), duration=r(0.25, 0.70))
+                pag.mouseDown()
             elif action['type'] == 'clickUp':
-                if pag.position() == (action['pos'][0], action['pos'][1]):
+                print(previous_position)
+                if previous_position == (action['pos'][0], action['pos'][1]):
                     pag.mouseUp(action['pos'][0], action['pos'][1])
                 # pag.moveTo(action['pos'][0], action['pos'][1], duration=0.25)
                 else:
-                    pag.moveTo(action['pos'][0], action['pos'][1], duration=0.25)
+                    pag.moveTo(action['pos'][0], action['pos'][1], duration=r(0.25, 1.00))
                     pag.mouseUp(action['pos'][0], action['pos'][1])
 
             # Sleep until next action

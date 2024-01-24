@@ -51,19 +51,20 @@ def run_listeners():
         listener.join()
 
 
-run_listeners()
+# run_listeners()
 
 
-def test_click_speed(x=1):
+def test_click_speed(x=1, coordinates=(1000, 500)):
     if x == 1:
-        pag.mouseDown(276, 540)
-        pag.mouseUp(276, 540)
-        pag.mouseDown(276, 540)
-        pag.mouseUp(276, 540)
+        pag.mouseDown(coordinates)
+        pag.mouseUp(coordinates)
+        pag.mouseDown(coordinates)
+        pag.mouseUp(coordinates)
         # Testing shows this action takes around .19s
     if x == 2:
-        pag.click(276, 540)
-        pag.click(276, 540)
+        pag.click(coordinates)
+        pag.click(coordinates)
         # Testing shows this action takes around .09s
 
-# test_click_speed(2)
+
+test_click_speed(1, (1697, 771))

@@ -38,8 +38,12 @@ def play_actions(filename):
                 pag.moveTo(action['pos'][0], action['pos'][1], duration=0.25)
                 pag.mouseDown(action['pos'][0], action['pos'][1])
             elif action['type'] == 'clickUp':
-                pag.moveTo(action['pos'][0], action['pos'][1], duration=0.25)
-                pag.mouseUp(action['pos'][0], action['pos'][1])
+                if pag.position() == (action['pos'][0], action['pos'][1]):
+                    pag.mouseUp(action['pos'][0], action['pos'][1])
+                # pag.moveTo(action['pos'][0], action['pos'][1], duration=0.25)
+                else:
+                    pag.moveTo(action['pos'][0], action['pos'][1], duration=0.25)
+                    pag.mouseUp(action['pos'][0], action['pos'][1])
 
             # Sleep until next action
             try:

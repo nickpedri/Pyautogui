@@ -53,5 +53,16 @@ def run_listeners():
 
 # run_listeners()
 
+def test_click_speed(x=1):
+    if x == 1:
+        pag.mouseDown(276, 540)
+        pag.mouseUp(276, 540)
+        pag.mouseDown(276, 540)
+        pag.mouseUp(276, 540)
+        # Testing shows this action takes around .19s
+    if x == 2:
+        pag.click(276, 540)
+        pag.click(276, 540)
+        # Testing shows this action takes around .09s
 
-pag.click
+# test_click_speed(2)

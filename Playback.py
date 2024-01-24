@@ -23,7 +23,7 @@ def play_actions(filename):
     with open(filepath, 'r') as jsonfile:
         data = json.load(jsonfile)
         for index, action in enumerate(data):
-            if action['button'] == 'Key.esc':
+            if action['button'] == 'Key.f10':
                 break
             # Perform action
             if action['type'] == 'KeyDown':

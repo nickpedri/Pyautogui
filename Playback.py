@@ -26,9 +26,11 @@ def play_actions(filename):
             if action['button'] == 'Key.f10':
                 break
             # Perform action
-            if action['type'] == 'KeyDown':
+            elif action['type'] == 'KeyDown':
+                # print('key down recognized')
                 pag.KeyDown(action['button'])
             elif action['type'] == 'KeyUp':
+                # print('key up recognized')
                 pag.KeyUp(action['button'])
             elif action['type'] == 'clickDown':
                 pag.moveTo(action['pos'][0], action['pos'][1], duration=0.25)
@@ -57,4 +59,11 @@ def main():
 
 main()
 
-
+'''
+script_dir = os.path.dirname(__file__)
+filepath = os.path.join(script_dir, 'recordings', 'actions_test_01.json')
+with open(filepath, 'r') as jsonfile:
+    data = json.load(jsonfile)
+for action in data:
+    print(action['button'])
+'''

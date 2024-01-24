@@ -1,4 +1,5 @@
 import os
+import pyautogui as pag
 from pynput import mouse, keyboard
 from time import time
 import json
@@ -50,4 +51,7 @@ def run_listeners():
         listener.join()
 
 
-run_listeners()
+# run_listeners()
+
+
+pag.click

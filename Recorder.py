@@ -18,8 +18,8 @@ unreleased_click = False
 
 
 class EventType:
-    KEYDOWN = 'keyDown'
-    KEYUP = 'keyUp'
+    KEYDOWN = 'KeyDown'
+    KEYUP = 'KeyUp'
     CLICKDOWN = 'clickDown'
     CLICKUP = 'clickUp'
     MOUSEMOVE = 'moveTo'

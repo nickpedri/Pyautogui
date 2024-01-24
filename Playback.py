@@ -27,11 +27,13 @@ def play_actions(filename):
                 break
             # Perform action
             elif action['type'] == 'KeyDown':
-                print('key down recognized')
-                pag.keyDown(action['button'])
+                key = action['button']
+                key = key[4:] if key[:4] == 'Key.' else key
+                pag.keyDown(key)
             elif action['type'] == 'KeyUp':
-                print('key up recognized')
-                pag.keyUp(action['button'])
+                key = action['button']
+                key = key[4:] if key[:4] == 'Key.' else key
+                pag.keyDown(key)
             elif action['type'] == 'clickDown':
                 pag.moveTo(action['pos'][0], action['pos'][1], duration=0.25)
                 pag.mouseDown(action['pos'][0], action['pos'][1])

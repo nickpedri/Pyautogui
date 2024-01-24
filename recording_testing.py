@@ -51,7 +51,8 @@ def run_listeners():
         listener.join()
 
 
-# run_listeners()
+run_listeners()
+
 
 def test_click_speed(x=1):
     if x == 1:

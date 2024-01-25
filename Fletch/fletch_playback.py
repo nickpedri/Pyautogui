@@ -93,22 +93,31 @@ def play_actions(filename):
                 raise Exception('Unexpected action ordering.')
 
 
+def check_inv():
+    script_dir = os.path.dirname(__file__)
+    img = os.path.join(script_dir, 'maple_bow_full_inv.png')
+    image_pos = None
+    print('Searching ', end='')
+    for s in range(1, 91):
+        try:
+            image_pos = pag.locateOnScreen(img)
+            print(' image found!')
+        except pag.ImageNotFoundException:
+            pass
+        if image_pos:
+            break
+        print('.', end='')
+        time.sleep(1)
+    # print('Done!')
+
+
 def main():
     countdown(3)
     initialize_pag()
-    for n in range(1, 51):
+    for n in range(1, 101):
         play_actions('fletch.json')
-        time.sleep(55 + r(0, 5))
+        check_inv()
         print(f'Loop {n} done!')
 
 
 main()
-
-'''
-script_dir = os.path.dirname(__file__)
-filepath = os.path.join(script_dir, 'recordings', 'actions_test_01.json')
-with open(filepath, 'r') as jsonfile:
-    data = json.load(jsonfile)
-for action in data:
-    print(action['button'])
-'''

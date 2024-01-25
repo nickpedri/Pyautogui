@@ -23,4 +23,13 @@ def check_inv():
     print('Done!')
 
 
-check_inv()
+def check_pixel(x, y, r, g, b, t=10):
+    if pag.pixelMatchesColor(x, y, (r, g, b), tolerance=t):
+        print('Match!')
+    else:
+        print('No match.')
+
+
+# check_inv()
+
+check_pixel(750, 322, 255, 242, 0, t=5)

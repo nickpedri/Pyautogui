@@ -46,7 +46,7 @@ def convert_key(key):
 def play_actions(filename):
     previous_position = None
     script_dir = os.path.dirname(__file__)
-    filepath = os.path.join(script_dir, 'recordings', filename)
+    filepath = os.path.join(script_dir, filename)
     with open(filepath, 'r') as jsonfile:
         data = json.load(jsonfile)
         for index, action in enumerate(data):
@@ -97,7 +97,7 @@ def main():
     countdown(3)
     initialize_pag()
     for n in range(1, 51):
-        play_actions('actions_test_01.json')
+        play_actions('fletch.json')
         time.sleep(55 + r(0, 5))
         print(f'Loop {n} done!')
 

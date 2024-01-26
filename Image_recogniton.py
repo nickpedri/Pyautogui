@@ -2,7 +2,6 @@ import pyautogui
 import pyautogui as pag
 import time
 import os
-import json
 
 
 def check_inv():
@@ -32,8 +31,6 @@ def check_pixel(x, y, rgb, t=5):
 
 # check_inv()
 
-# check_pixel(750, 322, (255, 242, 0), t=5)
-
 
 def wait_for(image):
     script_dir = os.path.dirname(__file__)
@@ -48,4 +45,4 @@ def wait_for(image):
             time.sleep(0.25)
 
 
-wait_for('pyramid_block_2.png')
+check_pixel(954, 506, (0, 255, 0), 5)

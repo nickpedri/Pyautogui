@@ -268,17 +268,5 @@
             665,
             534
         ]
-    },
-    {
-        "time": 75.9748547077179,
-        "type": "KeyDown",
-        "button": "Key.f10",
-        "pos": null
-    },
-    {
-        "time": 76.08456110954285,
-        "type": "KeyUp",
-        "button": "Key.f10",
-        "pos": null
     }
 ]

@@ -93,27 +93,34 @@ def play_actions(filename):
                 raise Exception('Unexpected action ordering.')
 
 
-def wait_for(image):
+def wait_for(image, c=0.98):
     script_dir = os.path.dirname(__file__)
     img = os.path.join(script_dir, image)
+    print('Waiting ', end='')
     while True:
         try:
-            pag.locateOnScreen(img, confidence=0.95)
-            print(f'Found at: {pag.locateOnScreen(img, confidence=0.95)}')
+            pag.locateOnScreen(img, confidence=c)
+            print(f' now!')
             break
         except pag.ImageNotFoundException:
-            print('Not found!')
+            print('.', end='')
             time.sleep(0.25)
+
+
+def check_position():
 
 
 def main():
     countdown(3)
     initialize_pag()
     play_actions('agility_pyramid_pt1.json')
-    wait_for('pyramid_block_1.png')
+    time.sleep(4)
+    wait_for('pyramid_block_1.png', c=0.98)
     play_actions('agility_pyramid_pt2.json')
-    wait_for('pyramid_block_2.png')
+    time.sleep(4)
+    wait_for('pyramid_block_2.png', c=0.95)
     play_actions('agility_pyramid_pt3.json')
+    time.sleep(5)
 
 
 main()

@@ -4,7 +4,7 @@ from time import time
 import json
 
 
-OUTPUT_FILENAME = 'agility_pyramid_pt1'
+OUTPUT_FILENAME = 'agility_pyramid_pt_test'
 # Declare mouse_listener globally so that keyboard on release can stop it
 mouse_listener = None
 # Declare start_time globally so that the callback functions can reference it

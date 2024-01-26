@@ -107,7 +107,13 @@ def wait_for(image, c=0.98):
             time.sleep(0.25)
 
 
-def check_position():
+def check_position(x, y, rgb, t=5):
+    if pag.pixelMatchesColor(x, y, rgb, tolerance=t):
+        pass
+    else:
+        pag.moveTo(972 + p(-4, 4), 535 + p(-4, 4), r(0.25, 0.75))
+        pag.click()
+        time.sleep(1.5 + r(0, 1))
 
 
 def main():
@@ -120,7 +126,8 @@ def main():
     time.sleep(4)
     wait_for('pyramid_block_2.png', c=0.95)
     play_actions('agility_pyramid_pt3.json')
+    time.sleep(4)
+    check_position(954, 506, (0, 255, 0), 5)
+    play_actions('agility_pyramid_pt4.json')
     time.sleep(5)
 
-
-main()

@@ -160,5 +160,17 @@
             835,
             483
         ]
+    },
+    {
+        "time": 47.83331036567688,
+        "type": "KeyDown",
+        "button": "Key.f10",
+        "pos": null
+    },
+    {
+        "time": 47.94444489479065,
+        "type": "KeyUp",
+        "button": "Key.f10",
+        "pos": null
     }
 ]

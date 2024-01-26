@@ -2,6 +2,7 @@ import pyautogui
 import pyautogui as pag
 import time
 import os
+from randomizers import r, p
 
 
 def check_inv():
@@ -24,12 +25,11 @@ def check_inv():
 
 def check_pixel(x, y, rgb, t=5):
     if pag.pixelMatchesColor(x, y, rgb, tolerance=t):
-        print('Match!')
+        pass
     else:
-        print('No match.')
-
-
-# check_inv()
+        pag.moveTo(972 + p(-4, 4), 535 + p(-4, 4), r(0.25, 0.75))
+        pag.click()
+        time.sleep(1 + r(0, 1))
 
 
 def wait_for(image):

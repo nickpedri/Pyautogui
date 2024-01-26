@@ -32,4 +32,20 @@ def check_pixel(x, y, rgb, t=5):
 
 # check_inv()
 
-check_pixel(750, 322, (255, 242, 0), t=5)
+# check_pixel(750, 322, (255, 242, 0), t=5)
+
+
+def wait_for(image):
+    script_dir = os.path.dirname(__file__)
+    img = os.path.join(script_dir, 'images', image)
+    while True:
+        try:
+            pyautogui.locateOnScreen(img, confidence=0.95)
+            print(f'Found at: {pyautogui.locateOnScreen(img, confidence=0.95)}')
+            break
+        except pyautogui.ImageNotFoundException:
+            print('Not found!')
+            time.sleep(0.25)
+
+
+wait_for('pyramid_block_2.png')

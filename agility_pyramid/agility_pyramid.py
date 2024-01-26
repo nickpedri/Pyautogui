@@ -46,7 +46,7 @@ def convert_key(key):
 def play_actions(filename):
     previous_position = None
     script_dir = os.path.dirname(__file__)
-    filepath = os.path.join(script_dir, 'recordings', filename)
+    filepath = os.path.join(script_dir, filename)
     with open(filepath, 'r') as jsonfile:
         data = json.load(jsonfile)
         for index, action in enumerate(data):
@@ -93,11 +93,27 @@ def play_actions(filename):
                 raise Exception('Unexpected action ordering.')
 
 
+def wait_for(image):
+    script_dir = os.path.dirname(__file__)
+    img = os.path.join(script_dir, image)
+    while True:
+        try:
+            pag.locateOnScreen(img, confidence=0.95)
+            print(f'Found at: {pag.locateOnScreen(img, confidence=0.95)}')
+            break
+        except pag.ImageNotFoundException:
+            print('Not found!')
+            time.sleep(0.25)
+
+
 def main():
     countdown(3)
     initialize_pag()
     play_actions('agility_pyramid_pt1.json')
-
+    wait_for('pyramid_block_1.png')
+    play_actions('agility_pyramid_pt2.json')
+    wait_for('pyramid_block_2.png')
+    play_actions('agility_pyramid_pt3.json')
 
 
 main()

@@ -99,5 +99,4 @@ def main():
     play_actions('agility_pyramid_pt1.json')
 
 
-
 main()

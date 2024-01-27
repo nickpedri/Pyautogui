@@ -1,6 +1,7 @@
 import cv2 as cv
 import pyautogui as pag
 import time
+from randomizers import p, r
 
 
 # Capturing a smaller piece of the screen is much faster
@@ -24,15 +25,35 @@ def locate_simon():
     return simon_location
 
 
-start_time = time.time()
-elapsed_time = 0
-while elapsed_time < 10:
-    simon_movement = [locate_simon(), locate_simon()]
-    if simon_movement[-1] == simon_movement[-2]:
-        pag.moveTo(simon_movement[-1])
-        pag.click()
-        print(simon_movement)
-        break
-    elapsed_time = time.time() - start_time
-    print(elapsed_time)
+def trade_with_simon():
+    pag.moveTo(811 + p(-4, 4), 555 + p(-4, 4), r(0.25, 0.75))
+    pag.click()
+    time.sleep(6 + r(0.5, 0.9))
+
+    start_time = time.time()
+    elapsed_time = 0
+    print('Searching for simon ')
+
+    while elapsed_time < 20:
+        simon_movement = [locate_simon(), locate_simon()]
+        if simon_movement[-1] == simon_movement[-2]:
+            pag.moveTo(simon_movement[-1])
+            pag.click()
+            # print(simon_movement)
+            break
+        elapsed_time = time.time() - start_time
+        print('.', end='')
+    if elapsed_time > 20:
+        print('Could not locate simon.')
+        # print(elapsed_time)
+    else:
+        time.sleep(6 + r(0.5, 0.9))
+        pag.press('space')
+        time.sleep(2 + r(0, 1))
+        pag.press('1')
+        time.sleep(2 + r(0, 1))
+        print('Finished trading!')
+
+
+trade_with_simon()
 

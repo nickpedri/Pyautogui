@@ -25,6 +25,7 @@ def check_inv():
 
 def check_pixel(x, y, rgb, t=5):
     if pag.pixelMatchesColor(x, y, rgb, tolerance=t):
+        print('In position!')
         pass
     else:
         pag.moveTo(972 + p(-4, 4), 535 + p(-4, 4), r(0.25, 0.75))
@@ -45,4 +46,4 @@ def wait_for(image):
             time.sleep(0.25)
 
 
-check_pixel(954, 506, (0, 255, 0), 5)
+check_pixel(1140, 440, (255, 0, 0), 5)

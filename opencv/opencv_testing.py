@@ -26,8 +26,13 @@ def locate_simon():
 
 start_time = time.time()
 elapsed_time = 0
-
 while elapsed_time < 10:
-    pag.moveTo(locate_simon())
+    simon_movement = [locate_simon(), locate_simon()]
+    if simon_movement[-1] == simon_movement[-2]:
+        pag.moveTo(simon_movement[-1])
+        pag.click()
+        print(simon_movement)
+        break
     elapsed_time = time.time() - start_time
     print(elapsed_time)
+

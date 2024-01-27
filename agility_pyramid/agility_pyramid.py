@@ -121,15 +121,22 @@ def main():
     initialize_pag()
     for n in range(1, 4):
         play_actions('agility_pyramid_pt1.json')
-        time.sleep(3)
+        time.sleep(4)
         wait_for('pyramid_block_1.png', c=0.98)
+
         play_actions('agility_pyramid_pt2.json')
-        time.sleep(3)
+        time.sleep(4)
         wait_for('pyramid_block_2.png', c=0.95)
+
         play_actions('agility_pyramid_pt3.json')
-        time.sleep(3)
-        check_position(954, 506, (0, 255, 0), 5)
+        time.sleep(6)
+        check_position(1140, 440, (255, 0, 0), 5)
+
         play_actions('agility_pyramid_pt4.json')
+        time.sleep(4)
+        check_position(954, 506, (0, 255, 0), 5)
+
+        play_actions('agility_pyramid_pt5.json')
         time.sleep(7)
         print(f'Lap {n} done!')
 

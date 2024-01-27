@@ -131,6 +131,7 @@ def main():
         check_position(954, 506, (0, 255, 0), 5)
         play_actions('agility_pyramid_pt4.json')
         time.sleep(7)
+        print(f'Lap {n} done!')
 
 
 main()

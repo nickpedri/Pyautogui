@@ -55,7 +55,7 @@ def trade_with_simon():
         print('Finished trading!')
 
 
-# trade_with_simon()
+trade_with_simon()
 
 
 def locate_start():
@@ -69,5 +69,11 @@ def locate_start():
 
 
 pag.moveTo(locate_start())
+pag.click()
+time.sleep(5)
+pag.moveTo(974 + p(-4, 4), 536 + p(-4, 4), r(0.25, 0.75))
+pag.click()
+time.sleep(7)
+pag.moveTo(1037 + p(-4, 4), 506 + p(-4, 4), r(0.25, 0.75))
 pag.click()
 

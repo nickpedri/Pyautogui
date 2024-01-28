@@ -32,13 +32,14 @@ def trade_with_simon():
 
     start_time = time.time()
     elapsed_time = 0
-    print('Searching for simon ')
+    print('Searching for simon ', end='')
 
     while elapsed_time < 20:
         simon_movement = [locate_simon(), locate_simon()]
         if simon_movement[-1] == simon_movement[-2]:
             pag.moveTo(simon_movement[-1])
             pag.click()
+            print('simon found!')
             # print(simon_movement)
             break
         elapsed_time = time.time() - start_time
@@ -55,9 +56,6 @@ def trade_with_simon():
         print('Finished trading!')
 
 
-trade_with_simon()
-
-
 def locate_start():
     pag.screenshot('s2.png', region=(0, 0, 1920, 1080))
     start_area = cv.imread('s2.png', cv.IMREAD_UNCHANGED)
@@ -68,12 +66,16 @@ def locate_start():
     return estimated_start_loc
 
 
-pag.moveTo(locate_start())
-pag.click()
-time.sleep(5)
-pag.moveTo(974 + p(-4, 4), 536 + p(-4, 4), r(0.25, 0.75))
-pag.click()
-time.sleep(7)
-pag.moveTo(1037 + p(-4, 4), 506 + p(-4, 4), r(0.25, 0.75))
-pag.click()
+def reset_position():
+    pag.moveTo(locate_start())
+    pag.click()
+    time.sleep(5)
+    pag.moveTo(974 + p(-4, 4), 536 + p(-4, 4), r(0.25, 0.75))
+    pag.click()
+    time.sleep(7)
+    pag.moveTo(1037 + p(-4, 4), 506 + p(-4, 4), r(0.25, 0.75))
+    pag.click()
 
+
+trade_with_simon()
+reset_position()

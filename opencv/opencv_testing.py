@@ -55,5 +55,19 @@ def trade_with_simon():
         print('Finished trading!')
 
 
-trade_with_simon()
+# trade_with_simon()
+
+
+def locate_start():
+    pag.screenshot('s2.png', region=(0, 0, 1920, 1080))
+    start_area = cv.imread('s2.png', cv.IMREAD_UNCHANGED)
+    start_tile = cv.imread('start_tile.png', cv.IMREAD_UNCHANGED)
+    result = cv.matchTemplate(start_area, start_tile, cv.TM_CCOEFF_NORMED)
+    min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
+    estimated_start_loc = (max_loc[0], max_loc[1] - 20)
+    return estimated_start_loc
+
+
+pag.moveTo(locate_start())
+pag.click()
 

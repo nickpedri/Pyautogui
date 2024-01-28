@@ -96,7 +96,7 @@ def play_actions(filename):
 def main():
     countdown(3)
     initialize_pag()
-    play_actions('agility_pyramid_pt1.json')
+    play_actions('test.json')
 
 
 main()

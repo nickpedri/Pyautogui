@@ -13,7 +13,7 @@ from randomizers import p, r
 def locate_simon():
     pag.screenshot('s1.png', region=(550, 370, 500, 500))
     simon_area = cv.imread('s1.png', cv.IMREAD_UNCHANGED)
-    simon = cv.imread('simon_templeton.png', cv.IMREAD_UNCHANGED)
+    simon = cv.imread('../agility_pyramid/simon_templeton.png', cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(simon_area, simon, cv.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
 
@@ -58,8 +58,8 @@ def trade_with_simon():
 
 def locate_start():
     pag.screenshot('s2.png', region=(0, 0, 1920, 1080))
-    start_area = cv.imread('s2.png', cv.IMREAD_UNCHANGED)
-    start_tile = cv.imread('start_tile.png', cv.IMREAD_UNCHANGED)
+    start_area = cv.imread('../agility_pyramid/s2.png', cv.IMREAD_UNCHANGED)
+    start_tile = cv.imread('../agility_pyramid/start_tile.png', cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(start_area, start_tile, cv.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
     estimated_start_loc = (max_loc[0], max_loc[1] - 20)

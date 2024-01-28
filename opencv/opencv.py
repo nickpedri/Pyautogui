@@ -1,8 +1,8 @@
 import cv2 as cv
 import numpy as np
 
-simon_area = cv.imread('simon_area.png', cv.IMREAD_UNCHANGED)
-simon = cv.imread('simon_templeton.png', cv.IMREAD_UNCHANGED)
+simon_area = cv.imread('../agility_pyramid/simon_area.png', cv.IMREAD_UNCHANGED)
+simon = cv.imread('../agility_pyramid/simon_templeton.png', cv.IMREAD_UNCHANGED)
 
 result = cv.matchTemplate(simon_area, simon, cv.TM_CCOEFF_NORMED)
 

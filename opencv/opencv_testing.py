@@ -11,6 +11,7 @@ from randomizers import p, r
 
 
 def locate_simon():
+    timer = time.time()
     pag.screenshot('s1.png', region=(550, 370, 500, 500))
     simon_area = cv.imread('s1.png', cv.IMREAD_UNCHANGED)
     simon = cv.imread('../agility_pyramid/simon_templeton.png', cv.IMREAD_UNCHANGED)
@@ -22,6 +23,7 @@ def locate_simon():
 
     simon_location = (max_loc[0] + 550 + simon_w, max_loc[1] + 370 + simon_h)
     # print(simon_location)
+    print(time.time() - timer)
     return simon_location
 
 
@@ -58,8 +60,8 @@ def trade_with_simon():
 
 def locate_start():
     pag.screenshot('s2.png', region=(0, 0, 1920, 1080))
-    start_area = cv.imread('../agility_pyramid/s2.png', cv.IMREAD_UNCHANGED)
-    start_tile = cv.imread('../agility_pyramid/start_tile.png', cv.IMREAD_UNCHANGED)
+    start_area = cv.imread('s2.png', cv.IMREAD_UNCHANGED)
+    start_tile = cv.imread('start_tile.png', cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(start_area, start_tile, cv.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
     estimated_start_loc = (max_loc[0], max_loc[1] - 20)
@@ -68,6 +70,7 @@ def locate_start():
 
 def reset_position():
     pag.moveTo(locate_start())
+    time.sleep(0.25)
     pag.click()
     time.sleep(5)
     pag.moveTo(974 + p(-4, 4), 536 + p(-4, 4), r(0.25, 0.75))
@@ -77,5 +80,6 @@ def reset_position():
     pag.click()
 
 
-trade_with_simon()
-reset_position()
+# locate_simon()
+# trade_with_simon()
+# reset_position()

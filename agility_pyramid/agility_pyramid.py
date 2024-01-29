@@ -118,7 +118,8 @@ def check_position(x, y, rgb, t=5):
 
 
 def locate_simon():
-    pag.screenshot('s1.png', region=(550, 370, 500, 500))
+    timer = time.time()
+    pag.screenshot('s1.png', region=(640, 470, 400, 330))
     simon_area = cv.imread('s1.png', cv.IMREAD_UNCHANGED)
     simon = cv.imread('simon_templeton.png', cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(simon_area, simon, cv.TM_CCOEFF_NORMED)
@@ -127,8 +128,9 @@ def locate_simon():
     simon_w = simon.shape[1] / 2
     simon_h = simon.shape[0] / 2
 
-    simon_location = (max_loc[0] + 550 + simon_w, max_loc[1] + 370 + simon_h)
+    simon_location = (max_loc[0] + 640 + simon_w, max_loc[1] + 470 + simon_h)
     # print(simon_location)
+    print(time.time() - timer)
     return simon_location
 
 
@@ -188,7 +190,7 @@ def reset_position():
 def main():
     countdown(3)
     initialize_pag()
-    for n in range(1, 13):
+    for n in range(1, 31):
         play_actions('agility_pyramid_pt1.json')
         time.sleep(4)
         wait_for('pyramid_block_1.png', c=0.98)
@@ -212,8 +214,15 @@ def main():
         if n % 3 == 0:
             trade_with_simon()
             reset_position()
+        if n % 25 == 0:
+            play_actions('fill_water.json')
+            time.sleep(5)
 
 
-main()
+# main()
+
 # trade_with_simon()
 # reset_position()
+
+play_actions('fill_water.json')
+time.sleep(5)

@@ -1,0 +1,74 @@
+[
+    {
+        "time": 2.6460535526275635,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1868,
+            723
+        ]
+    },
+    {
+        "time": 2.755518913269043,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1868,
+            723
+        ]
+    },
+    {
+        "time": 5.27313232421875,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1767,
+            780
+        ]
+    },
+    {
+        "time": 5.372802734375,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1767,
+            780
+        ]
+    },
+    {
+        "time": 8.023434400558472,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1770,
+            723
+        ]
+    },
+    {
+        "time": 8.051388263702393,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1770,
+            723
+        ]
+    },
+    {
+        "time": 8.07230544090271,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1770,
+            723
+        ]
+    },
+    {
+        "time": 8.188108921051025,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1770,
+            723
+        ]
+    }
+]

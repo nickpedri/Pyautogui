@@ -190,7 +190,7 @@ def reset_position():
 def main():
     countdown(3)
     initialize_pag()
-    for n in range(1, 31):
+    for n in range(1, 121):
         play_actions('agility_pyramid_pt1.json')
         time.sleep(4)
         wait_for('pyramid_block_1.png', c=0.98)
@@ -214,15 +214,13 @@ def main():
         if n % 3 == 0:
             trade_with_simon()
             reset_position()
-        if n % 25 == 0:
+        if n % 20 == 0:
             play_actions('fill_water.json')
             time.sleep(5)
 
 
-# main()
+main()
 
 # trade_with_simon()
 # reset_position()
 
-play_actions('fill_water.json')
-time.sleep(5)

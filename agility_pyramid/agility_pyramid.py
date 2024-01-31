@@ -89,7 +89,7 @@ def play_actions(filename):
                 if action['type'] == 'clickDown':
                     time.sleep(wait_time)
                 else:
-                    time.sleep(wait_time + r(0, 0.30))
+                    time.sleep(wait_time + r(0, 0.10))
             else:
                 raise Exception('Unexpected action ordering.')
 

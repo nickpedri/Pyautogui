@@ -46,7 +46,7 @@ def convert_key(key):
 def play_actions(filename):
     previous_position = None
     script_dir = os.path.dirname(__file__)
-    filepath = os.path.join(script_dir, 'recordings', filename)
+    filepath = os.path.join(script_dir, '../Recordings', filename)
     with open(filepath, 'r') as jsonfile:
         data = json.load(jsonfile)
         for index, action in enumerate(data):

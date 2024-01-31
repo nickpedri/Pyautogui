@@ -1,7 +1,7 @@
 import cv2 as cv
 import pyautogui as pag
 import time
-from randomizers import p, r
+from testing.randomizers import p, r
 
 
 # Capturing a smaller piece of the screen is much faster
@@ -14,7 +14,7 @@ def locate_simon():
     timer = time.time()
     pag.screenshot('s1.png', region=(550, 370, 500, 500))
     simon_area = cv.imread('s1.png', cv.IMREAD_UNCHANGED)
-    simon = cv.imread('../agility_pyramid/simon_templeton.png', cv.IMREAD_UNCHANGED)
+    simon = cv.imread('../scripts/agility_pyramid/simon_templeton.png', cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(simon_area, simon, cv.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
 

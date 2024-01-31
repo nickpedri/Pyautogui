@@ -1,7 +1,7 @@
 import cv2 as cv
 import pyautogui as pag
 import time
-from testing.randomizers import p, r
+from functions import p, r
 
 
 # Capturing a smaller piece of the screen is much faster

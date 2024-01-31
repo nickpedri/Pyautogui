@@ -2,7 +2,7 @@ import pyautogui
 import pyautogui as pag
 import time
 import os
-from randomizers import r, p
+from functions import r, p
 
 
 def check_inv():

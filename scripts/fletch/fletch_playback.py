@@ -2,7 +2,7 @@ import pyautogui as pag
 import time
 import os
 import json
-from testing.randomizers import p, r
+from functions import p, r
 
 
 def initialize_pag():

@@ -1,16 +1,32 @@
-import pyautogui as pag
+import random
 import time
+from time import time
+import pyautogui as pag
 import os
 import json
-from functions import p, r
+
+
+def r(a=0.55, b=0.75):  # Define function and define numbers
+    """ Function returns a random number between a and b"""
+    return random.uniform(a, b)  # Return numbers
+
+
+def p(a=3, b=None):  # Define function and define numbers
+    """ This function returns a random integer between a and b or -a and a, if b isn't specified"""
+    if b is None:
+        return random.randint(-a, a)  # Return integers
+    else:
+        return random.randint(a, b)
 
 
 def initialize_pag():
+    """ Function simply enables the pag failsafe"""
     pag.FAILSAFE = True  # Turn on failsafe
     print('Pyautogui failsafe enabled!')
 
 
-def countdown(seconds=10):
+def countdown(seconds=3):
+    """ This function starts a simple countdown timer"""
     print(f'Starting', end='')
     for s in range(1, seconds + 1):
         print('.', end='')
@@ -19,6 +35,7 @@ def countdown(seconds=10):
 
 
 def convert_key(key):
+    """ This function is a simple converter to translate pynput keys to pag readable keys"""
     key_map = {
         'alt_l': 'altleft',
         'alt_r': 'altright',
@@ -33,17 +50,15 @@ def convert_key(key):
         'num_lock': 'numlock',
         'print_screen': 'printscreen',
         'scroll_lock': 'scrolllock'}
-
     # example: 'Key.F9' should return 'F9', 'w' should return as 'w'
     cleaned_key = key.replace('Key.', '')
-
     if cleaned_key in key_map:
         return key_map[cleaned_key]
-
     return cleaned_key
 
 
 def play_actions(filename):
+    """ This function reads json 'recording' files"""
     previous_position = None
     script_dir = os.path.dirname(__file__)
     filepath = os.path.join(script_dir, '../Recordings', filename)
@@ -93,10 +108,5 @@ def play_actions(filename):
                 raise Exception('Unexpected action ordering.')
 
 
-def main():
-    countdown(3)
-    initialize_pag()
-    play_actions('test.json')
 
 
-main()

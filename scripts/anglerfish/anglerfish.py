@@ -1,4 +1,6 @@
 import os
+import time
+
 import functions as f
 import pyautogui as pag
 import cv2 as cv
@@ -7,6 +9,7 @@ import numpy as np
 # functions are designed to work at 25% zoom
 
 needle = cv.imread('fish2.png', cv.IMREAD_UNCHANGED)
+reset_tile = cv.imread('reset_tile.png', cv.IMREAD_UNCHANGED)
 character_location = (945, 540)
 
 
@@ -79,6 +82,28 @@ def calculate_distance(click_points):
     return closest_point
 
 
+def bank_fish():
+    global reset_tile
+    pag.screenshot('fish_spots.png', region=(0, 0, 1650, 1000))
+    haystack = cv.imread('fish_spots.png', cv.IMREAD_UNCHANGED)
+    result = cv.matchTemplate(haystack, reset_tile, cv.TM_CCOEFF_NORMED)
+    min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
+    tile_w = int(reset_tile.shape[0] / 2)
+    tile_h = int(reset_tile.shape[1] / 2)
+    esl = (max_loc[0] + tile_w, max_loc[1] + tile_h)
+    print(esl)
+    pag.moveTo(esl[0], esl[1], f.r())
+    time.sleep(f.r(0, 0.10))
+    pag.click()
+
+
+def check_if_fishing(x, y, rgb, t=5):
+    if pag.pixelMatchesColor(x, y, rgb, tolerance=t):
+        return False
+    else:
+        return True
+
+
 results = find_spots(.50)
 results = create_rectangles(results)
 results = find_click_spots(results)
@@ -87,3 +112,6 @@ results = find_click_spots(results)
 print(results)
 print(calculate_distance(results))
 pag.moveTo(calculate_distance(results))
+
+print(check_if_fishing(55, 55, (255, 0, 0)))
+bank_fish()

@@ -6,7 +6,7 @@ import os
 import json
 
 
-def r(a=0.55, b=0.75):  # Define function and define numbers
+def r(a=0.25, b=0.75):  # Define function and define numbers
     """ Function returns a random number between a and b"""
     return random.uniform(a, b)  # Return numbers
 

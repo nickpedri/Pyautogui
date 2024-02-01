@@ -1,6 +1,4 @@
-import os
 import time
-
 import functions as f
 import pyautogui as pag
 import cv2 as cv
@@ -82,7 +80,7 @@ def calculate_distance(click_points):
     return closest_point
 
 
-def bank_fish():
+def bank_fish(filename):
     global reset_tile
     pag.screenshot('fish_spots.png', region=(0, 0, 1650, 1000))
     haystack = cv.imread('fish_spots.png', cv.IMREAD_UNCHANGED)
@@ -91,27 +89,70 @@ def bank_fish():
     tile_w = int(reset_tile.shape[0] / 2)
     tile_h = int(reset_tile.shape[1] / 2)
     esl = (max_loc[0] + tile_w, max_loc[1] + tile_h)
-    print(esl)
+    # print(esl)
     pag.moveTo(esl[0], esl[1], f.r())
     time.sleep(f.r(0, 0.10))
     pag.click()
+    time.sleep(5 + f.r(1, 2))
+    f.play_actions(f'C:\\Users\\nickp\\PythonWork\\Pyautogui\\scripts\\anglerfish\\{filename}.json')
+    time.sleep(6 + f.r(1, 2))
 
 
-def check_if_fishing(x, y, rgb, t=5):
-    if pag.pixelMatchesColor(x, y, rgb, tolerance=t):
+def check_if_fishing(t=5):
+    elapsed_time = 0
+    start_time = time.time()
+    print('Fishing ...', end='')
+    while elapsed_time < 120:
+        if pag.pixelMatchesColor(55, 55, (255, 0, 0), tolerance=t):
+            print('Not fishing!')
+            break
+        elif pag.pixelMatchesColor(51, 55, (0, 255, 0), tolerance=t):
+            print('.', end='')
+            elapsed_time = time.time() - start_time
+            time.sleep(4 + f.r(1, 2))
+        else:
+            print('No overlay found!')
+
+
+def check_inv():
+    if pag.pixelMatchesColor(1829, 981, (62, 53, 41), tolerance=5):
+        print('Inventory not full!')
         return False
     else:
+        print('Inventory full!')
         return True
 
 
-results = find_spots(.50)
-results = create_rectangles(results)
-results = find_click_spots(results)
+def start_fishing():
+    results = find_spots(.50)
+    results = create_rectangles(results)
+    results = find_click_spots(results)
+    pag.moveTo(*calculate_distance(results), f.r())
+    time.sleep(f.r(0.1, 0.2))
+    pag.click()
+    time.sleep(5 + f.r(1, 2))
+
+
 # draw_rectangles('fish_spots.png', results)
 # draw_markers('fish_spots.png', results)
-print(results)
-print(calculate_distance(results))
-pag.moveTo(calculate_distance(results))
+# check_if_fishing(55, 55, (255, 0, 0))
+# check_inv()
+# bank_fish()
 
-print(check_if_fishing(55, 55, (255, 0, 0)))
-bank_fish()
+
+def main():
+    f.countdown()
+    f.initialize_pag()
+    for n in range(1, 30):
+        full = check_inv()
+        while full is False:
+            start_fishing()
+            check_if_fishing()
+            full = check_inv()
+        if full:
+            bank_fish('bank_fish')
+        print(f'Loop {n} done.')
+    print('Done!')
+
+
+main()

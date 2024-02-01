@@ -70,11 +70,13 @@ def find_click_spots(rectangles):
 def calculate_distance(click_points):
     global character_location
     distances = []
-    closest = 0
     for (x, y) in click_points:
         total_distance = abs(x - character_location[0]) + abs(y - character_location[1])
         distances.append(total_distance)
-    return distances
+    min_index = np.argmin(np.array(distances))
+    # print(min_index)
+    closest_point = click_points[min_index]
+    return closest_point
 
 
 results = find_spots(.50)
@@ -84,3 +86,4 @@ results = find_click_spots(results)
 # draw_markers('fish_spots.png', results)
 print(results)
 print(calculate_distance(results))
+pag.moveTo(calculate_distance(results))

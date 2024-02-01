@@ -7,6 +7,7 @@ import numpy as np
 # functions are designed to work at 25% zoom
 
 needle = cv.imread('fish2.png', cv.IMREAD_UNCHANGED)
+character_location = (945, 540)
 
 
 def find_spots(threshold=0.60):
@@ -66,9 +67,20 @@ def find_click_spots(rectangles):
     return click_points
 
 
+def calculate_distance(click_points):
+    global character_location
+    distances = []
+    closest = 0
+    for (x, y) in click_points:
+        total_distance = abs(x - character_location[0]) + abs(y - character_location[1])
+        distances.append(total_distance)
+    return distances
+
+
 results = find_spots(.50)
 results = create_rectangles(results)
-draw_rectangles('fish_spots.png', results)
-draw_markers('fish_spots.png', results)
-print(find_click_spots(results))
+results = find_click_spots(results)
+# draw_rectangles('fish_spots.png', results)
+# draw_markers('fish_spots.png', results)
 print(results)
+print(calculate_distance(results))

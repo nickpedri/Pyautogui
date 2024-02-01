@@ -6,7 +6,7 @@ import numpy as np
 
 # functions are designed to work at 25% zoom
 
-needle = cv.imread('fish.png', cv.IMREAD_UNCHANGED)
+needle = cv.imread('fish2.png', cv.IMREAD_UNCHANGED)
 
 
 def find_spots(threshold=0.60):
@@ -49,10 +49,10 @@ def create_rectangles(coordinates):
     return rectangles
 
 
-res = find_spots(.50)
+res = find_spots(.45)
 the_rectangles = create_rectangles(res)
 highlight_results('fish_spots.png', the_rectangles)
 
-the_rectangles, weights = cv.groupRectangles(the_rectangles, 2, 0.50)
+the_rectangles, weights = cv.groupRectangles(the_rectangles, 1, 0.50)
 highlight_results('fish_spots.png', the_rectangles)
 print(the_rectangles)

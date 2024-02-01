@@ -19,7 +19,18 @@ def find_spots(threshold=0.60):
     return locations
 
 
-def highlight_results(haystack, locations):
+def create_rectangles(coordinates, group_threshold=1, eps=0.50):
+    global needle
+    rectangles = []
+    for loc in coordinates:
+        rect = [int(loc[0]), int(loc[1]), needle.shape[1], needle.shape[0]]
+        rectangles.append(rect)
+        rectangles.append(rect)
+    rectangles, weights = cv.groupRectangles(rectangles, group_threshold, eps)
+    return rectangles
+
+
+def draw_rectangles(haystack, locations):
     global needle
     image1 = cv.imread(haystack, cv.IMREAD_UNCHANGED)
     if len(locations):
@@ -36,23 +47,28 @@ def highlight_results(haystack, locations):
         print('No matches :(')
 
 
-# res = find_spots(.55)
-# highlight_results('fish_spots.png', res)
-# print(res)
-
-def create_rectangles(coordinates):
-    global needle
-    rectangles = []
-    for loc in coordinates:
-        rect = [int(loc[0]), int(loc[1]), needle.shape[1], needle.shape[0]]
-        rectangles.append(rect)
-    return rectangles
+def draw_markers(haystack, rectangles):
+    img = cv.imread(haystack, cv.IMREAD_UNCHANGED)
+    marker_color = (255, 0, 255)
+    marker_type = cv.MARKER_CROSS
+    for (x, y, w, h) in rectangles:
+        center = ((x + int(w/2)), y + int(h/2))
+        cv.drawMarker(img, center, marker_color, marker_type)
+    cv.imshow('Matches', img)
+    cv.waitKey()
 
 
-res = find_spots(.45)
-the_rectangles = create_rectangles(res)
-highlight_results('fish_spots.png', the_rectangles)
+def find_click_spots(rectangles):
+    click_points = []
+    for (x, y, w, h) in rectangles:
+        center = ((x + int(w/2)), y + int(h/2))
+        click_points.append(center)
+    return click_points
 
-the_rectangles, weights = cv.groupRectangles(the_rectangles, 1, 0.50)
-highlight_results('fish_spots.png', the_rectangles)
-print(the_rectangles)
+
+results = find_spots(.50)
+results = create_rectangles(results)
+draw_rectangles('fish_spots.png', results)
+draw_markers('fish_spots.png', results)
+print(find_click_spots(results))
+print(results)

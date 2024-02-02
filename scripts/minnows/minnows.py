@@ -4,11 +4,15 @@ import pyautogui as pag
 import cv2 as cv
 import numpy as np
 
+# script works at about 50% zoom
+
 needle = cv.imread('minnow.png', cv.IMREAD_UNCHANGED)
+character_location = (945, 540)
+capture_region = (580, 380, 770, 370)
 
 
-def find_spots(threshold=0.60):
-    pag.screenshot('minnow_spots.png', region=(0, 0, 1650, 1000))
+def find_spots(threshold=0.50):
+    pag.screenshot('minnow_spots.png', region=capture_region)
     global needle
     haystack = cv.imread('minnow_spots.png', cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
@@ -55,3 +59,74 @@ def draw_markers(haystack, rectangles):
     cv.imshow('Matches', img)
     cv.waitKey()
 
+
+def visualize(t=0.50):
+    results = create_rectangles(find_spots(t))
+    draw_rectangles('minnow_spots.png', results)
+    draw_markers('minnow_spots.png', results)
+
+
+def find_click_spots(rectangles):
+    global capture_region
+    click_points = []
+    for (x, y, w, h) in rectangles:
+        center = ((x + capture_region[0] + int(w/2)), y + capture_region[1] + int(h/2))
+        click_points.append(center)
+    return click_points
+
+
+def calculate_distance(click_points):
+    global character_location
+    distances = []
+    for (x, y) in click_points:
+        total_distance = abs(x - character_location[0]) + abs((y - character_location[1]) * 1.25)
+        distances.append(total_distance)
+    min_index = np.argmin(np.array(distances))
+    # print(min_index)
+    closest_point = click_points[min_index]
+    closest_point = (closest_point[0] + f.p(7), closest_point[1] + f.p(7))
+    print(closest_point)
+    return closest_point
+
+
+def start_fishing():
+    results = find_spots(.45)
+    results = create_rectangles(results)
+    results = find_click_spots(results)
+    pag.moveTo(*calculate_distance(results), f.r(.05, 0.10))
+    time.sleep(f.r(0.1, 0.2))
+    pag.click()
+    pag.moveTo(1000 + f.p(20), 900 + f.p(20), f.r(.25, .35))
+    time.sleep(f.r(2, 2.5))
+
+
+def check_if_fishing(t=5):
+    elapsed_time = 0
+    start_time = time.time()
+    print('Fishing ...', end='')
+    while elapsed_time < 15:
+        if pag.pixelMatchesColor(55, 55, (255, 0, 0), tolerance=t):
+            print('Not fishing!')
+            time.sleep(f.r(1.5, 2))
+            break
+        elif pag.pixelMatchesColor(50, 55, (0, 255, 0), tolerance=t):
+            print('.', end='')
+            elapsed_time = time.time() - start_time
+            time.sleep(f.r(2, 3))
+        else:
+            print('No overlay found!')
+            time.sleep(3)
+
+
+def main():
+    f.countdown()
+    f.initialize_pag()
+    loops = 0
+    while loops < 20:
+        start_fishing()
+        check_if_fishing()
+        loops += 1
+
+
+main()
+# visualize()

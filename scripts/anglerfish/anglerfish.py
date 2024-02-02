@@ -11,6 +11,20 @@ reset_tile = cv.imread('reset_tile.png', cv.IMREAD_UNCHANGED)
 character_location = (945, 540)
 
 
+def move_click(x, y, move_duration=f.r(), wait_duration=f.r()):
+    pag.moveTo(x, y, move_duration)
+    pag.click()
+    time.sleep(wait_duration)
+
+
+def set_up():
+    f.shift_camera_direction('north', up=True)
+    move_click(1800 + f.p(), 1020 + f.p())
+    move_click(1757, 855)
+    move_click(1698 + f.p(), 856 + f.p())
+    pag.press('f2')
+
+
 def find_spots(threshold=0.60):
     pag.screenshot('fish_spots.png', region=(0, 0, 1650, 1000))
     global needle
@@ -142,9 +156,11 @@ def start_fishing():
 # bank_fish()
 
 
-def main():
+def main(setup=False):
     f.countdown()
     f.initialize_pag()
+    if setup:
+        set_up()
     for n in range(1, 15):
         full = check_inv()
         while full is False:
@@ -158,4 +174,7 @@ def main():
 
 
 # bank_fish('bank_fish')
-main()
+# main()
+
+# set_up()
+# bank_fish('bank_fish')

@@ -118,11 +118,27 @@ def check_if_fishing(t=5):
             time.sleep(3)
 
 
-def main():
+def move_click(x, y, move_duration=f.r(), wait_duration=f.r()):
+    pag.moveTo(x, y, move_duration)
+    pag.click()
+    time.sleep(wait_duration)
+
+
+def set_up():
+    f.shift_camera_direction('north', up=True)
+    move_click(1800 + f.p(), 1020 + f.p())
+    move_click(1782, 855)
+    move_click(1698 + f.p(), 856 + f.p())
+    pag.press('f2')
+
+
+def main(setup=False):
+    if setup:
+        set_up()
     f.countdown()
     f.initialize_pag()
     loops = 0
-    while loops < 20:
+    while loops < 1000:
         start_fishing()
         check_if_fishing()
         loops += 1
@@ -130,3 +146,4 @@ def main():
 
 main()
 # visualize()
+

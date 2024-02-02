@@ -33,6 +33,36 @@ def countdown(seconds=3):
     print(' now!')
 
 
+def shift_camera_direction(direction='north', up=True):
+    pag.moveTo(1725 + p(-8, 8), 52 + p(-8, 8), r(0.75, 0.90))
+    time.sleep(r(0.15, 0.80))
+    if direction == 'north':
+        pag.click()
+    elif direction == 'east':
+        pag.rightClick()
+        time.sleep(r(0.10, 0.30))
+        pag.move(0 + p(-5, 5), 42 + p(), r(0.75, 0.90))
+        time.sleep(r(0.10, 0.30))
+        pag.click()
+    elif direction == 'south':
+        pag.rightClick()
+        time.sleep(r(0.10, 0.30))
+        pag.move(0 + p(-5, 5), 57 + p(), r(0.75, 0.90))
+        time.sleep(r(0.10, 0.30))
+        pag.click()
+    elif direction == 'west':
+        pag.rightClick()
+        time.sleep(r(0.10, 0.30))
+        pag.move(0 + p(-5, 5), 72 + p(), r(0.75, 0.90))
+        time.sleep(r(0.10, 0.30))
+        pag.click()
+    time.sleep(r(0.25, 1.5))
+    if up:
+        pag.keyDown('up')
+        time.sleep(3)
+        pag.keyUp('up')
+
+
 def convert_key(key):
     """ This function is a simple converter to translate pynput keys to pag readable keys"""
     key_map = {

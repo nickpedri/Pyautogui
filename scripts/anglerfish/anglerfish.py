@@ -106,12 +106,13 @@ def check_if_fishing(t=5):
         if pag.pixelMatchesColor(55, 55, (255, 0, 0), tolerance=t):
             print('Not fishing!')
             break
-        elif pag.pixelMatchesColor(51, 55, (0, 255, 0), tolerance=t):
+        elif pag.pixelMatchesColor(50, 55, (0, 255, 0), tolerance=t):
             print('.', end='')
             elapsed_time = time.time() - start_time
             time.sleep(4 + f.r(1, 2))
         else:
             print('No overlay found!')
+            time.sleep(10)
 
 
 def check_inv():
@@ -133,6 +134,7 @@ def start_fishing():
     time.sleep(5 + f.r(1, 2))
 
 
+# results = create_rectangles(find_spots())
 # draw_rectangles('fish_spots.png', results)
 # draw_markers('fish_spots.png', results)
 # check_if_fishing(55, 55, (255, 0, 0))
@@ -143,7 +145,7 @@ def start_fishing():
 def main():
     f.countdown()
     f.initialize_pag()
-    for n in range(1, 30):
+    for n in range(1, 15):
         full = check_inv()
         while full is False:
             start_fishing()

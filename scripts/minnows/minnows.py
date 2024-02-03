@@ -132,11 +132,11 @@ def set_up():
     pag.press('f2')
 
 
-def main(setup=False):
-    if setup:
-        set_up()
+def main(setup=True):
     f.countdown()
     f.initialize_pag()
+    if setup:
+        set_up()
     loops = 0
     while loops < 1000:
         start_fishing()

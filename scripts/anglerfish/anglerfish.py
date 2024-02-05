@@ -162,7 +162,7 @@ def main(setup=False):
     if setup:
         set_up()
     for n in range(1, 15):
-        full = check_inv()
+        full = check_invcho()
         while full is False:
             start_fishing()
             check_if_fishing()

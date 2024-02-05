@@ -144,6 +144,7 @@ def main(setup=True):
         loops += 1
 
 
-main()
+main(False)
 # visualize()
 
+# set_up()

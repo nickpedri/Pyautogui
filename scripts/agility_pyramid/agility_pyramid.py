@@ -6,6 +6,8 @@ import json
 from functions import p, r
 import functions
 
+# Done at 0% zoom
+
 
 def initialize_pag():
     pag.FAILSAFE = True  # Turn on failsafe

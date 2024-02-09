@@ -137,5 +137,3 @@ def play_actions(filename):
                 raise Exception('Unexpected action ordering.')
 
 
-
-

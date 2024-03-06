@@ -193,7 +193,7 @@ def reset_position():
 def main():
     countdown(3)
     initialize_pag()
-    for n in range(1, 46):
+    for n in range(1, 66):
         play_actions('agility_pyramid_pt1.json')
         time.sleep(4)
         wait_for('pyramid_block_1.png', c=0.97)

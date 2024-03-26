@@ -1,74 +1,68 @@
 [
     {
-        "time": 2.6460535526275635,
+        "time": 3.2873640060424805,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
             1868,
-            723
+            721
         ]
     },
     {
-        "time": 2.755518913269043,
+        "time": 3.4116370677948,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
             1868,
-            723
+            721
         ]
     },
     {
-        "time": 5.27313232421875,
+        "time": 5.348154783248901,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            1767,
-            780
+            1788,
+            789
         ]
     },
     {
-        "time": 5.372802734375,
+        "time": 5.468341827392578,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            1767,
-            780
+            1788,
+            789
         ]
     },
     {
-        "time": 8.023434400558472,
+        "time": 10.347473859786987,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            1770,
-            723
+            1768,
+            722
         ]
     },
     {
-        "time": 8.051388263702393,
+        "time": 10.468815803527832,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            1770,
-            723
+            1768,
+            722
         ]
     },
     {
-        "time": 8.07230544090271,
-        "type": "clickDown",
-        "button": "Button.left",
-        "pos": [
-            1770,
-            723
-        ]
+        "time": 13.060619592666626,
+        "type": "KeyDown",
+        "button": "Key.f10",
+        "pos": null
     },
     {
-        "time": 8.188108921051025,
-        "type": "clickUp",
-        "button": "Button.left",
-        "pos": [
-            1770,
-            723
-        ]
+        "time": 13.154398679733276,
+        "type": "KeyUp",
+        "button": "Key.f10",
+        "pos": null
     }
 ]

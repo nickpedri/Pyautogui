@@ -127,6 +127,7 @@ def check_if_fishing(t=5):
         else:
             print('No overlay found!')
             time.sleep(10)
+            break
 
 
 def check_inv():

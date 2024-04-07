@@ -5,5 +5,5 @@ import cv2 as cv
 import numpy as np
 
 for n in range(1, 105):
-    f.play_actions('make_unf_potions.json')
+    f.play_actions('make_potions.json')
     time.sleep(1)

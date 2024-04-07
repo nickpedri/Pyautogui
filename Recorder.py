@@ -4,7 +4,7 @@ from time import time
 import json
 
 
-OUTPUT_FILENAME = 'make_unf_potions'
+OUTPUT_FILENAME = 'make_potions'
 # Declare mouse_listener globally so that keyboard on release can stop it
 mouse_listener = None
 # Declare start_time globally so that the callback functions can reference it
@@ -103,7 +103,7 @@ def main():
     print(json.dumps(input_events))
 
     script_dir = os.path.dirname(__file__)
-    filepath = os.path.join(script_dir, '../Recordings', f'{OUTPUT_FILENAME}.json')
+    filepath = os.path.join(script_dir, 'Recordings', f'{OUTPUT_FILENAME}.json')
     with open(filepath, 'w') as outfile:
         json.dump(input_events, outfile, indent=4)
 

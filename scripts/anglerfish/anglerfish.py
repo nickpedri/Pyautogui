@@ -20,6 +20,7 @@ def move_click(x, y, move_duration=f.r(), wait_duration=f.r()):
 def set_up():
     f.shift_camera_direction('north', up=True)
     move_click(1800 + f.p(), 1020 + f.p())
+    move_click(1830 + f.p(), 756 + f.p())
     move_click(1757, 855)
     move_click(1698 + f.p(), 856 + f.p())
     pag.press('f2')

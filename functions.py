@@ -33,6 +33,12 @@ def countdown(seconds=3):
     print(' now!')
 
 
+def move_click(x, y, move_duration=r(), wait_duration=r()):
+    pag.moveTo(x, y, move_duration)
+    pag.click()
+    time.sleep(wait_duration)
+
+
 def shift_camera_direction(direction='north', up=True):
     pag.moveTo(1725 + p(-8, 8), 52 + p(-8, 8), r(0.75, 0.90))
     time.sleep(r(0.15, 0.80))

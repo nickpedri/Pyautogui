@@ -1,4 +1,5 @@
 import random
+import cv2 as cv
 import time
 import pyautogui as pag
 import os
@@ -37,6 +38,18 @@ def move_click(x, y, move_duration=r(), wait_duration=r()):
     pag.moveTo(x, y, move_duration)
     pag.click()
     time.sleep(wait_duration)
+
+
+def find(locate_img, ):
+    pag.screenshot('s2.png', region=(0, 0, 1920, 1080))
+    haystack = cv.imread('s2.png', cv.IMREAD_UNCHANGED)
+    needle = cv.imread(locate_img, cv.IMREAD_UNCHANGED)
+    result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
+    min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
+    needle_w = needle.shape[1] / 2
+    needle_h = needle.shape[0] / 2
+    estimated_start_loc = (max_loc[0] + needle_w, max_loc[1] + needle_h)
+    return estimated_start_loc
 
 
 def shift_camera_direction(direction='north', up=True):

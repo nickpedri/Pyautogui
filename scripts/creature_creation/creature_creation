@@ -1,6 +1,0 @@
-import time
-import functions as f
-import pyautogui as pag
-import cv2 as cv
-import numpy as np
-

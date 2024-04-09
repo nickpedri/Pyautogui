@@ -1,0 +1,104 @@
+[
+    {
+        "time": 4.641149282455444,
+        "type": "KeyDown",
+        "button": "d",
+        "pos": null
+    },
+    {
+        "time": 4.777450323104858,
+        "type": "KeyDown",
+        "button": "j",
+        "pos": null
+    },
+    {
+        "time": 5.036945104598999,
+        "type": "KeyDown",
+        "button": "p",
+        "pos": null
+    },
+    {
+        "time": 8.250813961029053,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1708,
+            793
+        ]
+    },
+    {
+        "time": 8.391007423400879,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1708,
+            793
+        ]
+    },
+    {
+        "time": 10.978590965270996,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            823,
+            559
+        ]
+    },
+    {
+        "time": 11.136552095413208,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            823,
+            559
+        ]
+    },
+    {
+        "time": 17.194199800491333,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            590,
+            713
+        ]
+    },
+    {
+        "time": 17.361419916152954,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            590,
+            713
+        ]
+    },
+    {
+        "time": 24.327820777893066,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            903,
+            1026
+        ]
+    },
+    {
+        "time": 24.474762201309204,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            903,
+            1026
+        ]
+    },
+    {
+        "time": 32.51168084144592,
+        "type": "KeyDown",
+        "button": "Key.f10",
+        "pos": null
+    },
+    {
+        "time": 32.633933305740356,
+        "type": "KeyUp",
+        "button": "Key.f10",
+        "pos": null
+    }
+]

@@ -35,8 +35,14 @@ def countdown(seconds=3):
 
 
 def move_click(x, y, move_duration=r(), wait_duration=r()):
-    pag.moveTo(x, y, move_duration)
+    pag.moveTo(x + p(), y + p(), move_duration)
     pag.click()
+    time.sleep(wait_duration)
+
+
+def move_right_click(x, y, move_duration=r(), wait_duration=r()):
+    pag.moveTo(x + p(), y + p(), move_duration)
+    pag.rightClick()
     time.sleep(wait_duration)
 
 
@@ -105,10 +111,13 @@ def convert_key(key):
     return cleaned_key
 
 
-def play_actions(filename):
+def play_actions(filename, new_path=None):
     """ This function reads json 'recording' files"""
     previous_position = None
-    script_dir = os.path.dirname(__file__)
+    if new_path:
+        script_dir = new_path
+    else:
+        script_dir = os.path.dirname(__file__)
     filepath = os.path.join(script_dir, filename)
     with open(filepath, 'r') as jsonfile:
         data = json.load(jsonfile)

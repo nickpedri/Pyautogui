@@ -79,7 +79,8 @@ def slaughter():
 
 def main():
     f.countdown()
-    for n in range(1, 45):
+    f.initialize_pag()
+    for n in range(1, 64):
         bank()
         teleport('house')
         f.play_actions('unicow.json', project_dir)

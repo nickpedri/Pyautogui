@@ -22,8 +22,8 @@
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            1788,
-            789
+            1767,
+            780
         ]
     },
     {
@@ -31,8 +31,8 @@
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            1788,
-            789
+            1767,
+            780
         ]
     },
     {
@@ -52,17 +52,5 @@
             1768,
             722
         ]
-    },
-    {
-        "time": 13.060619592666626,
-        "type": "KeyDown",
-        "button": "Key.f10",
-        "pos": null
-    },
-    {
-        "time": 13.154398679733276,
-        "type": "KeyUp",
-        "button": "Key.f10",
-        "pos": null
     }
 ]

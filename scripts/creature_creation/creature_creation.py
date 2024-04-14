@@ -5,10 +5,6 @@ import os
 import cv2 as cv
 import numpy as np
 
-project_dir = os.path.dirname(__file__)
-
-take_option = f.find('take_option.png')
-
 
 def teleport(location):
     if location == 'house':

@@ -19,7 +19,7 @@ def set_up():
     pag.press('f2')
 
 
-def find_spots(threshold=0.70):
+def find_spots(threshold=0.60):
     global needle
     attempt_count = 0
     while True:
@@ -97,8 +97,8 @@ def calculate_distance(click_points):
     return closest_point
 
 
-def start_fishing():
-    results = find_spots(.70)
+def start_fishing(x=0.60):
+    results = find_spots(x)
     if results == 'end_script':
         return 'end_script'
     results = create_rectangles(results)

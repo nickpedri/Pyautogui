@@ -148,7 +148,7 @@ def main(setup=False):
     f.initialize_pag()
     if setup:
         set_up()
-    for n in range(1, 50):
+    for n in range(1, 56):
         full = check_inv()
         while full is False:
             status_check = start_fishing(.35)

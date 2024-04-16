@@ -19,25 +19,6 @@ def set_up():
     pag.press('f2')
 
 
-def find_spots(threshold=0.60):
-    global needle
-    attempt_count = 0
-    while True:
-        pag.screenshot('infernal_eel_spots.png', region=(0, 0, 1650, 1000))
-        haystack = cv.imread('infernal_eel_spots.png', cv.IMREAD_UNCHANGED)
-        result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
-        locations = np.where(result > threshold)
-        locations = list(zip(*locations[::-1]))
-        if locations:
-            return locations
-        attempt_count += 1
-        if attempt_count > 10:
-            locations = 'end_script'
-            return locations
-        print(f'Failed to locate fishing spot {attempt_count} time(s). Waiting 15 seconds to retry.')
-        time.sleep(15)
-
-
 def create_rectangles(coordinates, group_threshold=1, eps=0.50):
     global needle
     rectangles = []
@@ -77,6 +58,25 @@ def draw_markers(haystack, rectangles):
     cv.waitKey()
 
 
+def find_spots(threshold=0.50):
+    global needle
+    attempt_count = 0
+    while True:
+        pag.screenshot('infernal_eel_spots.png', region=(0, 0, 1650, 1000))
+        haystack = cv.imread('infernal_eel_spots.png', cv.IMREAD_UNCHANGED)
+        result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
+        locations = np.where(result > threshold)
+        locations = list(zip(*locations[::-1]))
+        if locations:
+            return locations
+        attempt_count += 1
+        if attempt_count > 10:
+            locations = 'end_script'
+            return locations
+        print(f'Failed to locate fishing spot {attempt_count} time(s). Waiting 15 seconds to retry.')
+        time.sleep(15)
+
+
 def find_click_spots(rectangles):
     click_points = []
     for (x, y, w, h) in rectangles:
@@ -97,7 +97,7 @@ def calculate_distance(click_points):
     return closest_point
 
 
-def start_fishing(x=0.60):
+def start_fishing(x=0.35):
     results = find_spots(x)
     if results == 'end_script':
         return 'end_script'
@@ -151,16 +151,18 @@ def main(setup=False):
     for n in range(1, 50):
         full = check_inv()
         while full is False:
-            status_check = start_fishing()
+            status_check = start_fishing(.35)
             if status_check == 'end_script':
-                print('Could not find fishing locations. Ending script.')
                 break
             check_if_fishing()
             full = check_inv()
         if full:
             hammer_eels()
+        if status_check == 'end_script':
+            print('Could not find fishing locations. Ending script.')
+            break
         print(f'Loop {n} done.')
     print('Done!')
 
 
-main()
+main(True)

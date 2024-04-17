@@ -248,3 +248,32 @@ class WindowCapture:
     def get_screen_position(self, pos):
         return pos[0] + self.offset_x, pos[1] + self.offset_y
 
+
+def take_Screenshot(self):
+    # screenshot_name = "debug.bmp"  # set this
+
+    wDC = win32gui.GetWindowDC(self.hwnd)
+    dcObj = win32ui.CreateDCFromHandle(wDC)
+    cDC = dcObj.CreateCompatibleDC()
+    dataBitMap = win32ui.CreateBitmap()
+    dataBitMap.CreateCompatibleBitmap(dcObj, self.w, self.h)
+    cDC.SelectObject(dataBitMap)
+    cDC.BitBlt((0, 0), (self.w, self.h), dcObj, (0, 0), win32con.SRCCOPY)
+
+    # save screenshot
+    # dataBitMap.SaveBitmapFile(cDC, screenshot_name)
+
+    signedIntsArray = dataBitMap.GetBitmapBits(True)
+    screencapture = np.fromstring(signedIntsArray, dtype='uint8')
+    screencapture.shape = (self.h, self.w, 4)
+
+    # Free Resources
+    dcObj.DeleteDC()
+    cDC.DeleteDC()
+    win32gui.ReleaseDC(self.hwnd, wDC)
+    win32gui.DeleteObject(dataBitMap.GetHandle())
+
+    screencapture = screencapture[..., :3]
+    screencapture = np.ascontiguousarray(screencapture)
+
+    return screencapture

@@ -7,7 +7,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 def capture_runelite():
-    wincap = f.WindowCapture('RuneLite - Crad Booper')
+    # wincap = f.WindowCapture('RuneLite - Crad Booper')
 
     while True:
 

@@ -39,27 +39,85 @@ def countdown(seconds=3):
 
 
 def move_click(x, y, move_duration=r(), wait_duration=r()):
+    """ This function takes in x and y coordinates, and a movement and wait duration and executes actions."""
     pag.moveTo(x + p(), y + p(), move_duration)
     pag.click()
     time.sleep(wait_duration)
 
 
 def move_right_click(x, y, move_duration=r(), wait_duration=r()):
+    """ This function takes in x and y coordinates, and a movement and wait duration and executes actions."""
     pag.moveTo(x + p(), y + p(), move_duration)
     pag.rightClick()
     time.sleep(wait_duration)
 
 
 def find(locate_img, area=(0, 0, 1920, 1080)):
-    pag.screenshot('temporary_img.png', region=area)
-    haystack = cv.imread('temporary_img.png', cv.IMREAD_UNCHANGED)
+    """ This function takes in the name of an image file to search, and the search region, it will find the best
+    match for the image within the taken screenshot. It returns the x and y coordinates for the location of the best
+    match on screen."""
+    haystack = take_screenshot()
     needle = cv.imread(locate_img, cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
-    needle_w = needle.shape[1] / 2
-    needle_h = needle.shape[0] / 2
+    needle_w = round(needle.shape[1] / 2)
+    needle_h = round(needle.shape[0] / 2)
     estimated_start_loc = (max_loc[0] + needle_w + area[0], max_loc[1] + needle_h + area[1])
     return estimated_start_loc
+
+
+def find_spots(locate_img, threshold=0.50):
+    """ This function takes in the name of an image file to search, and threshold for image recognition. It will return
+    the locations of every match above the threshold."""
+    needle = cv.imread(locate_img, cv.IMREAD_UNCHANGED)
+    haystack = take_screenshot()
+    result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
+    locations = np.where(result > threshold)
+    locations = list(zip(*locations[::-1]))
+    if locations:
+        return locations
+    else:
+        print('No results found.')
+
+
+def create_rectangles(locate_img, coordinates, group_threshold=1, eps=0.50):
+    """ This function takes in the name of an image to read, coordinates for locations, and function parameters. It then
+    creates and returns a list of lists containing the x and y coordinates and height and width of the rectangles."""
+    needle = cv.imread(locate_img, cv.IMREAD_UNCHANGED)
+    rectangles = []
+    for loc in coordinates:
+        rect = [int(loc[0]), int(loc[1]), needle.shape[1], needle.shape[0]]
+        rectangles.append(rect)
+        rectangles.append(rect)
+    rectangles, weights = cv.groupRectangles(rectangles, group_threshold, eps)
+    return rectangles
+
+
+def draw_rectangles(haystack, locations):
+    image1 = cv.imread(haystack, cv.IMREAD_UNCHANGED)
+    if len(locations):
+        line_color = (0, 0, 255)
+        line_type = cv.LINE_4
+
+        for (x, y, w, h) in locations:
+            top_left = (x, y)
+            bottom_right = (x + w, y + h)
+            cv.rectangle(image1, top_left, bottom_right, line_color, line_type)
+        cv.imshow('Matches', image1)
+        cv.waitKey()
+    else:
+        print('No matches :(')
+
+
+def draw_markers(haystack, rectangles):
+    img = cv.imread(haystack, cv.IMREAD_UNCHANGED)
+    marker_color = (255, 0, 255)
+    marker_type = cv.MARKER_CROSS
+    for (x, y, w, h) in rectangles:
+        center = ((x + int(w/2)), y + int(h/2))
+        cv.drawMarker(img, center, marker_color, marker_type)
+    cv.imshow('Matches', img)
+    cv.waitKey()
 
 
 def shift_camera_direction(direction='north', up=True):
@@ -283,3 +341,7 @@ def take_screenshot(region=(0, 0, 1980, 1020), hwnd=None, save_screenshot=False,
     screenshot = np.ascontiguousarray(screenshot)
 
     return screenshot
+
+
+xyz = find('duck.png', )
+print(xyz)

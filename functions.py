@@ -180,11 +180,14 @@ class WindowCapture:
     offset_x = 0
     offset_y = 0
 
-    def __init__(self, window_name):
+    def __init__(self, window_name=None):
 
-        self.hwnd = win32gui.FindWindow(None, window_name)
-        if not self.hwnd:
-            raise Exception(f'Window not found: {window_name}')
+        if window_name is None:
+            self.hwnd = win32gui.GetDesktopWindow()
+        else:
+            self.hwnd = win32gui.FindWindow(None, window_name)
+            if not self.hwnd:
+                raise Exception(f'Window not found: {window_name}')
 
         window_rect = win32gui.GetWindowRect(self.hwnd)
         self.w = window_rect[2] - window_rect[0]
@@ -249,31 +252,34 @@ class WindowCapture:
         return pos[0] + self.offset_x, pos[1] + self.offset_y
 
 
-def take_Screenshot(self):
-    # screenshot_name = "debug.bmp"  # set this
-
-    wDC = win32gui.GetWindowDC(self.hwnd)
+def take_screenshot(region=(0, 0, 1980, 1020), hwnd=None, save_screenshot=False, screenshot_name='screenshot'):
+    x = region[0]
+    y = region[1]
+    w = region[2]
+    h = region[3]
+    wDC = win32gui.GetWindowDC(hwnd)
     dcObj = win32ui.CreateDCFromHandle(wDC)
     cDC = dcObj.CreateCompatibleDC()
     dataBitMap = win32ui.CreateBitmap()
-    dataBitMap.CreateCompatibleBitmap(dcObj, self.w, self.h)
+    dataBitMap.CreateCompatibleBitmap(dcObj, w, h)
     cDC.SelectObject(dataBitMap)
-    cDC.BitBlt((0, 0), (self.w, self.h), dcObj, (0, 0), win32con.SRCCOPY)
+    cDC.BitBlt((0, 0), (w, h), dcObj, (x, y), win32con.SRCCOPY)
 
     # save screenshot
-    # dataBitMap.SaveBitmapFile(cDC, screenshot_name)
+    if save_screenshot:
+        dataBitMap.SaveBitmapFile(cDC, screenshot_name)
 
     signedIntsArray = dataBitMap.GetBitmapBits(True)
-    screencapture = np.fromstring(signedIntsArray, dtype='uint8')
-    screencapture.shape = (self.h, self.w, 4)
+    screenshot = np.fromstring(signedIntsArray, dtype='uint8')
+    screenshot.shape = (h, w, 4)
 
     # Free Resources
     dcObj.DeleteDC()
     cDC.DeleteDC()
-    win32gui.ReleaseDC(self.hwnd, wDC)
+    win32gui.ReleaseDC(hwnd, wDC)
     win32gui.DeleteObject(dataBitMap.GetHandle())
 
-    screencapture = screencapture[..., :3]
-    screencapture = np.ascontiguousarray(screencapture)
+    screenshot = screenshot[..., :3]
+    screenshot = np.ascontiguousarray(screenshot)
 
-    return screencapture
+    return screenshot

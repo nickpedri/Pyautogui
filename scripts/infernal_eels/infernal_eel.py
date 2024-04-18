@@ -14,7 +14,8 @@ def set_up():
     f.shift_camera_direction('north', up=True)
     f.move_click(1800 + f.p(), 1020 + f.p())
     f.move_click(1830 + f.p(), 756 + f.p())
-    f.move_click(1763, 855)
+    pag.moveTo(1736, 855)
+    pag.click(1763, 855)
     f.move_click(1698 + f.p(), 856 + f.p())
     pag.press('f2')
 
@@ -151,7 +152,7 @@ def main(setup=False):
     for n in range(1, 56):
         full = check_inv()
         while full is False:
-            status_check = start_fishing(.35)
+            status_check = start_fishing(.45)
             if status_check == 'end_script':
                 break
             check_if_fishing()

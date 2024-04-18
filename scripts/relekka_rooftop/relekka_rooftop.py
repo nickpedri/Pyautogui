@@ -27,7 +27,7 @@ def wait_for(image, c=0.98):
             time.sleep(0.25)
 
 
-def check_for_mark(x, c=0.85):
+def check_for_mark(x, c=0.60):
     global mark_counter
     if x == '1':
         try:
@@ -51,8 +51,8 @@ def check_for_mark(x, c=0.85):
             return False
 
     if x == '3':
-        mrk1 = pag.pixelMatchesColor(891, 448, (255, 0, 0), tolerance=25)
-        mrk2 = pag.pixelMatchesColor(863, 470, (246, 0, 0), tolerance=25)
+        mrk1 = pag.pixelMatchesColor(864, 468, (255, 0, 0), tolerance=25)
+        mrk2 = pag.pixelMatchesColor(898, 444, (246, 0, 0), tolerance=25)
         if mrk1 or mrk2:
             mark_counter += 1
             print(f'Mark {mark_counter} found!')
@@ -89,7 +89,9 @@ def complete_lap():
     if check_for_mark('3', .85):
         f.move_click(883, 439)
         time.sleep(3 + f.r(0, 1))
-        f.move_click(857, 688)
+        f.move_click(912, 560)
+        time.sleep(2 + f.r(0, 1))
+        f.move_click(896, 646)
         time.sleep(4 + f.r(0, 1))
     else:
         f.move_click(796 + f.p(0, 15), 581 + f.p(0, 15))
@@ -112,5 +114,7 @@ def main():
 
 main()
 
-# p = pag.pixel(843, 448)
+# p = pag.pixel(864, 468)
 # print(p)
+
+

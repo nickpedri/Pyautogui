@@ -343,5 +343,5 @@ def take_screenshot(region=(0, 0, 1980, 1020), hwnd=None, save_screenshot=False,
     return screenshot
 
 
-xyz = find('duck.png', )
+xyz = find('duck.png')
 print(xyz)

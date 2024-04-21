@@ -38,6 +38,13 @@ def countdown(seconds=3):
     print(' now!')
 
 
+def take_screenshot():
+    screenshot = pag.screenshot()
+    screenshot = np.array(screenshot)
+    screenshot = cv.cvtColor(screenshot, cv.COLOR_RGB2BGR)
+    return screenshot
+
+
 def move_click(x, y, move_duration=r(), wait_duration=r()):
     """ This function takes in x and y coordinates, and a movement and wait duration and executes actions."""
     pag.moveTo(x + p(), y + p(), move_duration)
@@ -248,16 +255,21 @@ class WindowCapture:
                 raise Exception(f'Window not found: {window_name}')
 
         window_rect = win32gui.GetWindowRect(self.hwnd)
+        print(window_rect)
         self.w = window_rect[2] - window_rect[0]
         self.h = window_rect[3] - window_rect[1]
 
         # account for the window border and titlebar and cut them off
-        border_pixels = 8
-        titlebar_pixels = 30
-        self.w = self.w - (border_pixels * 2)
-        self.h = self.h - titlebar_pixels - border_pixels
-        self.cropped_x = border_pixels
-        self.cropped_y = titlebar_pixels
+        if not window_name:
+            border_pixels = 8
+            titlebar_pixels = 30
+            self.w = self.w - (border_pixels * 2)
+            self.h = self.h - titlebar_pixels - border_pixels
+            self.cropped_x = border_pixels
+            self.cropped_y = titlebar_pixels
+        else:
+            self.cropped_x = 0
+            self.cropped_y = 0
 
         # set the cropped coordinates offset, so we can translate screenshot
         # images into actual screen positions
@@ -273,11 +285,10 @@ class WindowCapture:
         dataBitMap = win32ui.CreateBitmap()
         dataBitMap.CreateCompatibleBitmap(dcObj, self.w, self.h)
         cDC.SelectObject(dataBitMap)
-        cDC.BitBlt((0, 0), (self.w, self.h), dcObj, (8, 30), win32con.SRCCOPY)
+        cDC.BitBlt((0, 0), (self.w, self.h), dcObj, (self.cropped_x, self.cropped_y), win32con.SRCCOPY)
 
         # save screenshot
         # dataBitMap.SaveBitmapFile(cDC, screenshot_name)
-
         signedIntsArray = dataBitMap.GetBitmapBits(True)
         screencapture = np.fromstring(signedIntsArray, dtype='uint8')
         screencapture.shape = (self.h, self.w, 4)
@@ -288,9 +299,17 @@ class WindowCapture:
         win32gui.ReleaseDC(self.hwnd, wDC)
         win32gui.DeleteObject(dataBitMap.GetHandle())
 
+        # drop the alpha channel, or cv.matchTemplate() will throw an error like:
+        #   error: (-215:Assertion failed) (depth == CV_8U || depth == CV_32F) && type == _templ.type()
+        #   && _img.dims() <= 2 in function 'cv::matchTemplate'
         screencapture = screencapture[..., :3]
-        screencapture = np.ascontiguousarray(screencapture)
 
+        # make image C_CONTIGUOUS to avoid errors that look like:
+        #   File ... in draw_rectangles
+        #   TypeError: an integer is required (got type tuple)
+        # see the discussion here:
+        # https://github.com/opencv/opencv/issues/14866#issuecomment-580207109
+        screencapture = np.ascontiguousarray(screencapture)
         return screencapture
 
     @staticmethod
@@ -308,40 +327,3 @@ class WindowCapture:
     # the __init__ constructor.
     def get_screen_position(self, pos):
         return pos[0] + self.offset_x, pos[1] + self.offset_y
-
-
-def take_screenshot(region=(0, 0, 1980, 1020), hwnd=None, save_screenshot=False, screenshot_name='screenshot'):
-    x = region[0]
-    y = region[1]
-    w = region[2]
-    h = region[3]
-    wDC = win32gui.GetWindowDC(hwnd)
-    dcObj = win32ui.CreateDCFromHandle(wDC)
-    cDC = dcObj.CreateCompatibleDC()
-    dataBitMap = win32ui.CreateBitmap()
-    dataBitMap.CreateCompatibleBitmap(dcObj, w, h)
-    cDC.SelectObject(dataBitMap)
-    cDC.BitBlt((0, 0), (w, h), dcObj, (x, y), win32con.SRCCOPY)
-
-    # save screenshot
-    if save_screenshot:
-        dataBitMap.SaveBitmapFile(cDC, screenshot_name)
-
-    signedIntsArray = dataBitMap.GetBitmapBits(True)
-    screenshot = np.fromstring(signedIntsArray, dtype='uint8')
-    screenshot.shape = (h, w, 4)
-
-    # Free Resources
-    dcObj.DeleteDC()
-    cDC.DeleteDC()
-    win32gui.ReleaseDC(hwnd, wDC)
-    win32gui.DeleteObject(dataBitMap.GetHandle())
-
-    screenshot = screenshot[..., :3]
-    screenshot = np.ascontiguousarray(screenshot)
-
-    return screenshot
-
-
-xyz = find('duck.png')
-print(xyz)

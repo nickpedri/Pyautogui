@@ -8,11 +8,13 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 def capture_runelite():
-    # wincap = f.WindowCapture('RuneLite - Crad Booper')
+    wincap = f.WindowCapture()
 
     while True:
         t = time.time()
+        # screenshot = wincap.capture_window()  # Capture screenshot
         screenshot = f.take_screenshot()  # Capture screenshot
+
         cv.imshow('Computer Vision', screenshot)
         print(f'{round(1/(time.time() - t))} fps')
 

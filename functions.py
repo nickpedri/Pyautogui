@@ -38,8 +38,8 @@ def countdown(seconds=3):
     print(' now!')
 
 
-def take_screenshot():
-    screenshot = pag.screenshot()
+def take_screenshot(area=(0, 0, 1920, 1080)):
+    screenshot = pag.screenshot(region=area)
     screenshot = np.array(screenshot)
     screenshot = cv.cvtColor(screenshot, cv.COLOR_RGB2BGR)
     return screenshot
@@ -63,7 +63,7 @@ def find(locate_img, area=(0, 0, 1920, 1080)):
     """ This function takes in the name of an image file to search, and the search region, it will find the best
     match for the image within the taken screenshot. It returns the x and y coordinates for the location of the best
     match on screen."""
-    haystack = take_screenshot()
+    haystack = take_screenshot(area)
     needle = cv.imread(locate_img, cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
@@ -73,11 +73,11 @@ def find(locate_img, area=(0, 0, 1920, 1080)):
     return estimated_start_loc
 
 
-def find_spots(locate_img, threshold=0.50):
+def find_spots(locate_img, threshold=0.50, area=(0, 0, 1920, 1080)):
     """ This function takes in the name of an image file to search, and threshold for image recognition. It will return
     the locations of every match above the threshold."""
     needle = cv.imread(locate_img, cv.IMREAD_UNCHANGED)
-    haystack = take_screenshot()
+    haystack = take_screenshot(area)
     result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
     locations = np.where(result > threshold)
     locations = list(zip(*locations[::-1]))
@@ -100,8 +100,7 @@ def create_rectangles(locate_img, coordinates, group_threshold=1, eps=0.50):
     return rectangles
 
 
-def draw_rectangles(haystack, locations):
-    image1 = cv.imread(haystack, cv.IMREAD_UNCHANGED)
+def draw_rectangles(haystack, locations, show=True):
     if len(locations):
         line_color = (0, 0, 255)
         line_type = cv.LINE_4
@@ -109,9 +108,10 @@ def draw_rectangles(haystack, locations):
         for (x, y, w, h) in locations:
             top_left = (x, y)
             bottom_right = (x + w, y + h)
-            cv.rectangle(image1, top_left, bottom_right, line_color, line_type)
-        cv.imshow('Matches', image1)
-        cv.waitKey()
+            cv.rectangle(haystack, top_left, bottom_right, line_color, line_type)
+        if show:
+            cv.imshow('Matches', haystack)
+            cv.waitKey()
     else:
         print('No matches :(')
 
@@ -260,7 +260,7 @@ class WindowCapture:
         self.h = window_rect[3] - window_rect[1]
 
         # account for the window border and titlebar and cut them off
-        if not window_name:
+        if window_name:
             border_pixels = 8
             titlebar_pixels = 30
             self.w = self.w - (border_pixels * 2)

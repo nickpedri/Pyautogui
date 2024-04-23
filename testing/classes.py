@@ -6,9 +6,15 @@ class Food:
         self.hp_regen = hp_regen
 
 
+class Items:
+
+    def __init__(self, name):
+        self.name = name
+
+
 class Character:
 
-    def __init__(self, name, hp, dmg, speed, defense, alive=True):
+    def __init__(self, name, hp, dmg, speed, defense, items=[], alive=True):
         """ This function initializes a class/object with the attribute values passed in the arguments. """
         self.name = name
         self.hp = hp
@@ -16,6 +22,7 @@ class Character:
         self.speed = speed
         self.defense = defense
         self.alive = alive
+        self.items = items
         if self.hp <= 1:
             self.alive = False
 

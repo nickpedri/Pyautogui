@@ -39,6 +39,7 @@ def countdown(seconds=3):
 
 
 def take_screenshot(area=(0, 0, 1920, 1080)):
+    """ This function takes a screenshot of a specified area of the screen and returns it ready for match template."""
     screenshot = pag.screenshot(region=area)
     screenshot = np.array(screenshot)
     screenshot = cv.cvtColor(screenshot, cv.COLOR_RGB2BGR)
@@ -101,6 +102,8 @@ def create_rectangles(locate_img, coordinates, group_threshold=1, eps=0.50):
 
 
 def draw_rectangles(haystack, locations, show=True):
+    """ This function takes in an imread image and a list of rectangles and draws and draws a rectangle around
+    each search result."""
     if len(locations):
         line_color = (0, 0, 255)
         line_type = cv.LINE_4
@@ -116,18 +119,24 @@ def draw_rectangles(haystack, locations, show=True):
         print('No matches :(')
 
 
-def draw_markers(haystack, rectangles):
-    img = cv.imread(haystack, cv.IMREAD_UNCHANGED)
-    marker_color = (255, 0, 255)
-    marker_type = cv.MARKER_CROSS
-    for (x, y, w, h) in rectangles:
-        center = ((x + int(w/2)), y + int(h/2))
-        cv.drawMarker(img, center, marker_color, marker_type)
-    cv.imshow('Matches', img)
-    cv.waitKey()
+def draw_markers(haystack, rectangles, show=True):
+    """ This function takes in an imread image and a list of rectangles and draws and draws a marker on
+        each search result."""
+    if len(rectangles):
+        marker_color = (255, 0, 255)
+        marker_type = cv.MARKER_CROSS
+        for (x, y, w, h) in rectangles:
+            center = ((x + int(w/2)), y + int(h/2))
+            cv.drawMarker(haystack, center, marker_color, marker_type)
+        if show:
+            cv.imshow('Matches', haystack)
+            cv.waitKey()
+    else:
+        print('No matches :(')
 
 
 def shift_camera_direction(direction='north', up=True):
+    """ This function shifts the camera direction to a specific direction and can zoom out all the way."""
     pag.moveTo(1725 + p(-8, 8), 52 + p(-8, 8), r(0.75, 0.90))
     time.sleep(r(0.15, 0.80))
     if direction == 'north':
@@ -245,8 +254,9 @@ class WindowCapture:
     offset_x = 0
     offset_y = 0
 
-    def __init__(self, window_name=None):
+    def __init__(self, window_name=None, area=(0, 0, 1920, 1080)):
 
+        # Determine hwnd (window name)
         if window_name is None:
             self.hwnd = win32gui.GetDesktopWindow()
         else:
@@ -254,31 +264,29 @@ class WindowCapture:
             if not self.hwnd:
                 raise Exception(f'Window not found: {window_name}')
 
-        window_rect = win32gui.GetWindowRect(self.hwnd)
-        print(window_rect)
-        self.w = window_rect[2] - window_rect[0]
-        self.h = window_rect[3] - window_rect[1]
-
-        # account for the window border and titlebar and cut them off
+        # account for the window border and titlebar and cut them off if window name
         if window_name:
+            window_rect = win32gui.GetWindowRect(self.hwnd)
+            print(window_rect)
+            self.w = window_rect[2] - window_rect[0]
+            self.h = window_rect[3] - window_rect[1]
             border_pixels = 8
             titlebar_pixels = 30
             self.w = self.w - (border_pixels * 2)
             self.h = self.h - titlebar_pixels - border_pixels
             self.cropped_x = border_pixels
             self.cropped_y = titlebar_pixels
+            # set the cropped coordinates offset, so we can translate screenshot
+            # images into actual screen positions
+            self.offset_x = window_rect[0] + self.cropped_x
+            self.offset_y = window_rect[1] + self.cropped_y
         else:
-            self.cropped_x = 0
-            self.cropped_y = 0
-
-        # set the cropped coordinates offset, so we can translate screenshot
-        # images into actual screen positions
-        self.offset_x = window_rect[0] + self.cropped_x
-        self.offset_y = window_rect[1] + self.cropped_y
+            # area = ( x coordinate, y coordinate, width of area, height of area)
+            self.w, self.h, self.cropped_x, self.cropped_y = area[2], area[3], area[0], area[1]
 
     def capture_window(self):
         # screenshot_name = "debug.bmp"  # set this
-
+        # get the window image data
         wDC = win32gui.GetWindowDC(self.hwnd)
         dcObj = win32ui.CreateDCFromHandle(wDC)
         cDC = dcObj.CreateCompatibleDC()

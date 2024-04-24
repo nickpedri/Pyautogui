@@ -9,13 +9,13 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def capture_runelite():
     # wincap = f.WindowCapture('Runelite - Crad Booper')
-    wincap = f.WindowCapture()
+    wincap = f.WindowCapture(area=(1650, 700, 250, 350))
 
     while True:
         t = time.time()
         screenshot = wincap.capture_window()  # Capture screenshot
         # screenshot = f.take_screenshot()  # Capture screenshot
-        matches = f.find_spots('search_img.png', 0.70, area=(1000, 800, 920, 280))
+        matches = f.find_spots('search_img.png', 0.70)
         if matches:
             rectangles = f.create_rectangles('search_img.png', matches)
             f.draw_rectangles(screenshot, rectangles, False)

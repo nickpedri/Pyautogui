@@ -137,7 +137,7 @@ def choose_mission():
 
 
 def start_mission():
-
+    pass
 
 
 def run_game():

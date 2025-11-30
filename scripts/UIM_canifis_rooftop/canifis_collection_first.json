@@ -1,144 +1,138 @@
 [
     {
-        "time": 1.84293532371521,
+        "time": 3.3554866313934326,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            889,
-            145
+            940,
+            502
         ]
     },
     {
-        "time": 1.9592435359954834,
+        "time": 3.496483087539673,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            889,
-            145
+            940,
+            502
         ]
     },
     {
-        "time": 3.1685194969177246,
+        "time": 11.132789134979248,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            790,
-            684
+            944,
+            452
         ]
     },
     {
-        "time": 3.287734031677246,
+        "time": 11.28248143196106,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            790,
-            684
+            944,
+            452
         ]
     },
     {
-        "time": 4.447503328323364,
-        "type": "KeyDown",
-        "button": "Key.esc",
-        "pos": null
-    },
-    {
-        "time": 4.53928804397583,
-        "type": "KeyUp",
-        "button": "Key.esc",
-        "pos": null
-    },
-    {
-        "time": 5.780939340591431,
+        "time": 16.21697449684143,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            1748,
-            875
+            931,
+            451
         ]
     },
     {
-        "time": 5.88144850730896,
+        "time": 16.40422010421753,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            1748,
-            875
+            931,
+            451
         ]
     },
     {
-        "time": 6.682195425033569,
+        "time": 22.848000288009644,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            1745,
-            909
+            913,
+            506
         ]
     },
     {
-        "time": 6.782806396484375,
+        "time": 22.973275899887085,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            1745,
-            909
+            913,
+            506
         ]
     },
     {
-        "time": 7.748886346817017,
-        "type": "KeyDown",
-        "button": "Key.space",
-        "pos": null
-    },
-    {
-        "time": 7.899484157562256,
-        "type": "KeyUp",
-        "button": "Key.space",
-        "pos": null
-    },
-    {
-        "time": 16.97110366821289,
+        "time": 25.815839529037476,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            960,
-            553
+            796,
+            559
         ]
     },
     {
-        "time": 17.080977201461792,
+        "time": 26.025658130645752,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            960,
-            553
+            796,
+            559
         ]
     },
     {
-        "time": 18.759528398513794,
+        "time": 33.07164525985718,
         "type": "clickDown",
         "button": "Button.left",
         "pos": [
-            1002,
-            829
+            879,
+            629
         ]
     },
     {
-        "time": 18.87206268310547,
+        "time": 33.165014028549194,
         "type": "clickUp",
         "button": "Button.left",
         "pos": [
-            1002,
-            829
+            879,
+            629
         ]
     },
     {
-        "time": 19.935943841934204,
+        "time": 37.854471921920776,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            793,
+            591
+        ]
+    },
+    {
+        "time": 37.99678182601929,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            793,
+            591
+        ]
+    },
+    {
+        "time": 45.30042600631714,
         "type": "KeyDown",
         "button": "Key.f10",
         "pos": null
     },
     {
-        "time": 20.060471773147583,
+        "time": 45.50817847251892,
         "type": "KeyUp",
         "button": "Key.f10",
         "pos": null

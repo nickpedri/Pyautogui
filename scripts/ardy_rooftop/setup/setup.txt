@@ -1,0 +1,2 @@
+1. entity hider on
+2. camera is setup correctly

@@ -1,0 +1,110 @@
+[
+    {
+        "time": 2.6709930896759033,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            931,
+            260
+        ]
+    },
+    {
+        "time": 2.7685227394104004,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            931,
+            260
+        ]
+    },
+    {
+        "time": 13.398368120193481,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            816,
+            533
+        ]
+    },
+    {
+        "time": 13.462775945663452,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            816,
+            533
+        ]
+    },
+    {
+        "time": 20.963623046875,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            841,
+            538
+        ]
+    },
+    {
+        "time": 21.02999520301819,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            841,
+            538
+        ]
+    },
+    {
+        "time": 25.357836961746216,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            943,
+            714
+        ]
+    },
+    {
+        "time": 25.46060299873352,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            943,
+            714
+        ]
+    },
+    {
+        "time": 30.967992544174194,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            1066,
+            868
+        ]
+    },
+    {
+        "time": 31.036840677261353,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            1066,
+            868
+        ]
+    },
+    {
+        "time": 40.16397786140442,
+        "type": "clickDown",
+        "button": "Button.left",
+        "pos": [
+            961,
+            557
+        ]
+    },
+    {
+        "time": 40.27808141708374,
+        "type": "clickUp",
+        "button": "Button.left",
+        "pos": [
+            961,
+            557
+        ]
+    }
+]

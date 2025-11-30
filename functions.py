@@ -8,6 +8,7 @@ import win32con
 import win32gui
 import win32ui
 import numpy as np
+from PIL import Image
 
 
 def r(a=0.25, b=0.75):  # Define function and define numbers
@@ -38,26 +39,97 @@ def countdown(seconds=3):
     print(' now!')
 
 
-def take_screenshot(area=(0, 0, 1920, 1080)):
+def take_screenshot(area=(0, 0, 1920, 1080), save_img=False):
     """ This function takes a screenshot of a specified area of the screen and returns it ready for match template."""
     screenshot = pag.screenshot(region=area)
+    if save_img:
+        screenshot.save("screenshot.png")
     screenshot = np.array(screenshot)
     screenshot = cv.cvtColor(screenshot, cv.COLOR_RGB2BGR)
     return screenshot
 
 
-def move_click(x, y, move_duration=r(), wait_duration=r()):
+def isolate_exact_yellow(bgr_image, tolerance=10):
+    """
+    Keep only pixels that are very close to pure yellow (BGR 255,255,0)
+    tolerance: how many HSV units around the exact yellow to allow
+    """
+    # Convert BGR to HSV
+    hsv = cv.cvtColor(bgr_image, cv.COLOR_BGR2HSV)
+
+    # Pure yellow in BGR is (0, 255, 255) in HSV
+    # Hue for yellow ~30, Saturation ~255, Value ~255
+    # We'll allow a small tolerance for Hue/Sat/Val
+    lower_yellow = np.array([30 - tolerance, 255 - tolerance, 255 - tolerance])
+    upper_yellow = np.array([30 + tolerance, 255, 255])  # keep saturation/value at max
+
+    # Create mask
+    mask = cv.inRange(hsv, lower_yellow, upper_yellow)
+
+    # Apply mask: keep yellow, black out everything else
+    result = cv.bitwise_and(bgr_image, bgr_image, mask=mask)
+
+    # Convert to grayscale
+    gray = cv.cvtColor(result, cv.COLOR_BGR2GRAY)
+
+    # Threshold to pure black and white
+    _, thresh = cv.threshold(gray, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+
+    return thresh
+
+
+def to_pil_and_resize(cv_image, x=5, y=5, resize=True):
+    """Convert OpenCV grayscale/BGR image to PIL Image for pytesseract."""
+    if resize:
+        cv_image = cv.resize(cv_image, None, fx=x, fy=y, interpolation=cv.INTER_CUBIC)
+    if len(cv_image.shape) == 2:  # grayscale
+        return Image.fromarray(cv_image)
+    else:  # BGR
+        rgb_image = cv.cvtColor(cv_image, cv.COLOR_BGR2RGB)
+        return Image.fromarray(rgb_image)
+
+
+def move_click(x, y, move_duration=r(), wait_duration=r(), r1=p(), r2=p()):
     """ This function takes in x and y coordinates, and a movement and wait duration and executes actions."""
-    pag.moveTo(x + p(), y + p(), move_duration)
+    pag.moveTo(x + r1, y + r2, move_duration)
     pag.click()
     time.sleep(wait_duration)
 
 
-def move_right_click(x, y, move_duration=r(), wait_duration=r()):
+def move_right_click(x, y, move_duration=r(), wait_duration=r(), r1=p(), r2=p()):
     """ This function takes in x and y coordinates, and a movement and wait duration and executes actions."""
-    pag.moveTo(x + p(), y + p(), move_duration)
+    pag.moveTo(x + r1, y + r2, move_duration)
     pag.rightClick()
     time.sleep(wait_duration)
+
+
+def check_pixel_color_in_area(search_region=(960, 540, 6, 6), target_color=(0, 255, 0), tolerance=5):
+    """
+    Checks if the target color exists within the specified area of the image.
+    Args:
+        search_region (tuple): Tuple containing (top left x coordinate, top left y coordinate, width, height) of
+        the search area.
+        target_color (tuple): BGR color tuple to check for (e.g., (0, 0, 255) for red).
+        tolerance (int):
+    Returns:
+        bool: True if the color is found, False otherwise.
+    """
+    s = search_region
+    x, y, w, h = s[0], s[1], s[2], s[3]
+    pixel_match = False
+
+    for pix in range(x, (x + w + 1)):
+        for p2 in range(y, (y + h + 1)):
+            pixel_match = pag.pixelMatchesColor(pix, p2, target_color, tolerance=tolerance)
+            if pixel_match:
+                break
+        if pixel_match:
+            break
+
+    if pixel_match:
+        return True
+    else:
+        return False
 
 
 def find(locate_img, area=(0, 0, 1920, 1080)):
@@ -77,15 +149,16 @@ def find(locate_img, area=(0, 0, 1920, 1080)):
 def find_spots(locate_img, threshold=0.50, area=(0, 0, 1920, 1080)):
     """ This function takes in the name of an image file to search, and threshold for image recognition. It will return
     the locations of every match above the threshold."""
-    needle = cv.imread(locate_img, cv.IMREAD_UNCHANGED)
     haystack = take_screenshot(area)
+    needle = cv.imread(locate_img, cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
     locations = np.where(result > threshold)
     locations = list(zip(*locations[::-1]))
     if locations:
         return locations
     else:
-        print('No results found.')
+        pass
+        # print('No results found.')
 
 
 def create_rectangles(locate_img, coordinates, group_threshold=1, eps=0.50):
@@ -322,7 +395,7 @@ class WindowCapture:
 
     @staticmethod
     def list_window_names():
-        def winEnumHandler(hwnd, ctx):
+        def winEnumHandler(hwnd):
             if win32gui.IsWindowVisible(hwnd):
                 print(hex(hwnd), win32gui.GetWindowText(hwnd))
 
@@ -387,7 +460,7 @@ class Vision:
 
         points = []
         if len(rectangles):
-            #print('Found needle.')
+            # print('Found needle.')
 
             line_color = (0, 255, 0)
             line_type = cv.LINE_4
@@ -409,12 +482,12 @@ class Vision:
                     bottom_right = (x + w, y + h)
                     # Draw the box
                     cv.rectangle(haystack_img, top_left, bottom_right, color=line_color,
-                                lineType=line_type, thickness=2)
+                                 lineType=line_type, thickness=2)
                 elif debug_mode == 'points':
                     # Draw the center point
                     cv.drawMarker(haystack_img, (center_x, center_y),
-                                color=marker_color, markerType=marker_type,
-                                markerSize=40, thickness=2)
+                                  color=marker_color, markerType=marker_type,
+                                  markerSize=40, thickness=2)
 
         if debug_mode:
             cv.imshow('Matches', haystack_img)

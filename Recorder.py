@@ -4,7 +4,7 @@ from time import time
 import json
 
 
-OUTPUT_FILENAME = 'collect_mushrooms'
+OUTPUT_FILENAME = 'clean_herbs'
 # Declare mouse_listener globally so that keyboard on release can stop it
 mouse_listener = None
 # Declare start_time globally so that the callback functions can reference it

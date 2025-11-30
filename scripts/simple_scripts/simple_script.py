@@ -1,6 +1,7 @@
 import time
 import functions as f
 import os
+import random
 import pyautogui as pag
 import cv2 as cv
 import numpy as np
@@ -8,7 +9,15 @@ import numpy as np
 
 project_dir = os.path.dirname(__file__)
 
-for n in range(1, 108):
-    f.play_actions('make_potions_no_amulet.json', project_dir)
-    time.sleep(1)
-    print(f'Loop {n} done!')
+
+def main():
+    for n in range(1, 312):
+        f.play_actions('clean_herbs.json', project_dir)
+        time.sleep(f.r(1, 2))
+        print(f'Loop {n} done!')
+
+
+main()
+
+# time.sleep(3)
+# pag.keyDown('up', 5)

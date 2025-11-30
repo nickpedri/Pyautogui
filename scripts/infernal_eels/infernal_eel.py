@@ -108,6 +108,7 @@ def start_fishing(x=0.35):
     time.sleep(f.r(0.1, 0.2))
     pag.click()
     time.sleep(5 + f.r(1, 2))
+    pag.move(f.p(100, 300), -f.p(100, 300), f.r())
 
 
 def check_if_fishing(t=5):

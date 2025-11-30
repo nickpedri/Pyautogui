@@ -6,6 +6,9 @@ import cv2 as cv
 import numpy as np
 
 
+project_dir = os.path.dirname(__file__)
+
+
 def teleport(location):
     if location == 'house':
         pag.press('f4')

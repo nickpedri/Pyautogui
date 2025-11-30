@@ -3,12 +3,14 @@ import functions as f
 import pyautogui as pag
 import cv2 as cv
 import numpy as np
+import datetime
 
 # functions are designed to work at 25% zoom
 
 needle = cv.imread('fish2.png', cv.IMREAD_UNCHANGED)
 reset_tile = cv.imread('reset_tile.png', cv.IMREAD_UNCHANGED)
 character_location = (945, 540)
+fish_caught = 0
 
 
 def move_click(x, y, move_duration=f.r(), wait_duration=f.r()):
@@ -97,6 +99,7 @@ def calculate_distance(click_points):
 
 def bank_fish(filename):
     global reset_tile
+    global fish_caught
     pag.screenshot('fish_spots.png', region=(0, 0, 1650, 1000))
     haystack = cv.imread('fish_spots.png', cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(haystack, reset_tile, cv.TM_CCOEFF_NORMED)
@@ -111,6 +114,7 @@ def bank_fish(filename):
     time.sleep(5 + f.r(1, 2))
     f.play_actions(f'C:\\Users\\nickp\\PythonWork\\Pyautogui\\scripts\\anglerfish\\{filename}.json')
     time.sleep(6 + f.r(1, 2))
+    fish_caught += 45
 
 
 def check_if_fishing(t=5):
@@ -161,9 +165,11 @@ def start_fishing():
 def main(setup=False):
     f.countdown()
     f.initialize_pag()
+    start_time = time.time()
+    print(f'Script starting at: {datetime.datetime.now()}')
     if setup:
         set_up()
-    for n in range(1, 15):
+    for n in range(1, 22):
         full = check_inv()
         while full is False:
             start_fishing()
@@ -171,12 +177,13 @@ def main(setup=False):
             full = check_inv()
         if full:
             bank_fish('bank_fish')
-        print(f'Loop {n} done.')
-    print('Done!')
+        print(f'Inventory {n} done at {datetime.datetime.now()}')
+    print(f'Script duration: {str(datetime.timedelta(seconds=time.time() - start_time))}')
+    print(f'Total fish caught: {fish_caught}')
 
 
 # bank_fish('bank_fish')
-main()
+main(True)
 
 # set_up()
 # bank_fish('bank_fish')

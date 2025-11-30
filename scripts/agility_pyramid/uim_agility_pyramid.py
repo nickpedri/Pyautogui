@@ -111,7 +111,7 @@ def main():
 
         f.play_actions('agility_pyramid_pt2.json', project_dir)
         time.sleep(4)
-        wait_for('pyramid_block_2.png', c=0.95)
+        wait_for('pyramid_block_2.png', c=0.96)
 
         f.play_actions('agility_pyramid_pt3.json', project_dir)
         time.sleep(6)
@@ -128,14 +128,6 @@ def main():
         if n % 3 == 0:
             trade_with_simon()
             reset_position()
-        if n % 15 == 0:
-            f.play_actions('fill_water.json', project_dir)
-            time.sleep(5)
 
 
 main()
-
-# trade_with_simon()
-# reset_position()
-
-# f.play_actions('fill_water.json', project_dir)

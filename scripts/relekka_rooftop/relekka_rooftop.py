@@ -107,7 +107,7 @@ def complete_lap():
 def main():
     f.countdown()
     f.initialize_pag()
-    for n in range(1, 170):
+    for n in range(1, 225):
         complete_lap()
         print(f'Lap {n} done!')
 

@@ -39,11 +39,11 @@ def countdown(seconds=3):
     print(' now!')
 
 
-def take_screenshot(area=(0, 0, 1920, 1080), save_img=False):
+def take_screenshot(area=(0, 0, 1920, 1080), save_img=False, img_name='screenshot.png'):
     """ This function takes a screenshot of a specified area of the screen and returns it ready for match template."""
     screenshot = pag.screenshot(region=area)
     if save_img:
-        screenshot.save("screenshot.png")
+        screenshot.save(img_name)
     screenshot = np.array(screenshot)
     screenshot = cv.cvtColor(screenshot, cv.COLOR_RGB2BGR)
     return screenshot
@@ -78,6 +78,23 @@ def isolate_exact_yellow(bgr_image, tolerance=10):
     return thresh
 
 
+def prep_for_ocr(img):
+    """Very simple preprocessing for single-color text on dark background."""
+    # 1. Convert to grayscale
+    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+
+    # 2. Small blur for stability (optional but helps)
+    gray = cv.GaussianBlur(gray, (3, 3), 0)
+
+    # 3. Otsu threshold — automatically separates bright text from dark bg
+    _, thresh = cv.threshold(gray, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+
+    # 4. Invert: text = white, background = black (OCR prefers this)
+    thresh = 255 - thresh
+
+    return thresh
+
+
 def to_pil_and_resize(cv_image, x=5, y=5, resize=True):
     """Convert OpenCV grayscale/BGR image to PIL Image for pytesseract."""
     if resize:
@@ -101,6 +118,19 @@ def move_right_click(x, y, move_duration=r(), wait_duration=r(), r1=p(), r2=p())
     pag.moveTo(x + r1, y + r2, move_duration)
     pag.rightClick()
     time.sleep(wait_duration)
+
+
+def find_option(option_img, xy=(100, 100), search_window=(150, 50, 300, 300), t=0.88, test=False, img_name='s'):
+    move_right_click(*xy)
+    x = xy[0] - search_window[0] if xy[0] - search_window[0] >= 0 else 0
+    y = xy[1] - search_window[1] if xy[1] - search_window[1] >= 0 else 0
+
+    option = find(option_img, (x, y, search_window[2], search_window[3]), threshold=t,
+                  save_img=test, img_name=img_name)
+    return option
+    # print(option)
+    # move_click(option[0], option[1])
+    # time.sleep(5 + r())
 
 
 def check_pixel_color_in_area(search_region=(960, 540, 6, 6), target_color=(0, 255, 0), tolerance=5):
@@ -132,18 +162,22 @@ def check_pixel_color_in_area(search_region=(960, 540, 6, 6), target_color=(0, 2
         return False
 
 
-def find(locate_img, area=(0, 0, 1920, 1080)):
+def find(locate_img, area=(0, 0, 1920, 1080), threshold=None, save_img=False, img_name='screenshot.png'):
     """ This function takes in the name of an image file to search, and the search region, it will find the best
     match for the image within the taken screenshot. It returns the x and y coordinates for the location of the best
     match on screen."""
-    haystack = take_screenshot(area)
+    haystack = take_screenshot(area, save_img=save_img, img_name=img_name)
     needle = cv.imread(locate_img, cv.IMREAD_UNCHANGED)
     result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
-    needle_w = round(needle.shape[1] / 2)
-    needle_h = round(needle.shape[0] / 2)
-    estimated_start_loc = (max_loc[0] + needle_w + area[0], max_loc[1] + needle_h + area[1])
-    return estimated_start_loc
+
+    if threshold is not None and max_val > threshold:
+        needle_w = round(needle.shape[1] / 2)
+        needle_h = round(needle.shape[0] / 2)
+        estimated_start_loc = (max_loc[0] + needle_w + area[0], max_loc[1] + needle_h + area[1])
+        return estimated_start_loc
+    else:
+        return None
 
 
 def find_spots(locate_img, threshold=0.50, area=(0, 0, 1920, 1080)):

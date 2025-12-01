@@ -86,10 +86,66 @@ def deposit_in_hopper():
     time.sleep(f.r(6, 7))
 
 
+def check_struts():
+    north_strut = (734, 301)
+    south_strut = (704, 446)
+
+    n = f.find_option('hammer.png', xy=north_strut, t=0.95, test=True, img_name='north_strut.png')
+    print('North strut is broken') if n is not None else print('North strut is not broken')
+
+    s = f.find_option('hammer.png', xy=south_strut, t=0.95, test=True, img_name='south_strut.png')
+    print('South strut is broken') if s is not None else print('South strut not is broken')
+
+    # t = f.find_option('hammer.png', xy=(1000, 1000), t=0.95, test=True, img_name='test.png')
+    # print('test strut broken') if t is not None else print('test strut not broken')
+    if n is not None or s is not None:
+        print('Struts are broken')
+        return True
+
+    else:
+        print('No struts are broken')
+        return False
+
+
+def repair_struts():
+    pag.moveTo(1 + f.r(100, 200), 1 + f.r(100, 200))
+    time.sleep(f.r(0.10, 0.20))
+    f.move_click(680, 456)
+    time.sleep(f.r(6, 7))
+    s = f.find_option('hammer.png', xy=(986, 527), t=0.95)
+    if s is not None:
+        f.move_click(*s)
+        print('Repairing south strut')
+        time.sleep(f.r(2, 3))
+
+    f.move_click(945, 373)
+    time.sleep(f.r(4, 5))
+    n = f.find_option('hammer.png', xy=(986, 527), t=0.95)
+    if n is not None:
+        f.move_click(*n)
+        print('Repairing north strut')
+        time.sleep(f.r(2, 3))
+    # return to strut check tile
+    f.move_click(1300, 865)
+    time.sleep(f.r(8, 9))
+
+
+def bank_ores():
+    f.play_actions('bank_ores.json', project_dir)
+    time.sleep(f.r(4, 5))
+
+
+def collect_ores():
+    f.move_click(980, 629)  # Climb down ladder
+    time.sleep(f.r(6, 7))
+    f.move_click(731, 1010)  # Walk down
+    time.sleep(f.r(8, 9))
+
+
 def main(setup=True):
-    start_time = time.time()  # Start timer for script
-    f.countdown(2)
     f.initialize_pag()
+    start_time = time.time()  # Start timer for script
+    f.countdown(1)
     if setup:
         set_up()
 
@@ -100,9 +156,13 @@ def main(setup=True):
             check_if_mining()
             full = check_inv()
         deposit_in_hopper()
+
         if n % 4 == 0:
-            f.play_actions('collect_ores.json', project_dir)
-            time.sleep(f.r(7, 8))
+            collect_ores()
+            fix = check_struts()
+            if fix:
+                repair_struts()
+            bank_ores()
         else:
             f.move_click(887, 366)
             time.sleep(f.r(5, 6))
@@ -111,4 +171,4 @@ def main(setup=True):
     print(f'Script duration: {str(datetime.timedelta(seconds=time.time() - start_time))}')
 
 
-main()
+main(True)

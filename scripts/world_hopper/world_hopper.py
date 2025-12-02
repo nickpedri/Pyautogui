@@ -3,7 +3,7 @@ import functions as f
 import time
 import sys
 import os
-import cv2 as cv
+import numpy as np
 import digit_extractor as de
 
 # Add the number_extraction folder to Python's module search path
@@ -36,31 +36,46 @@ def world_tab(command):
 
 
 def create_world_list(length):
-    pag.moveTo(1300 + f.p(), 100 + f.p())
     world_tab('open')
-    x = 1852
-    worlds = list()
-    current_px_color = (0, 0, 0)
+    pag.moveTo(1300 + f.p(), 100 + f.p())
 
-    for y in range(50, length):
-        pix = pag.pixel(x, y)
-        if pix != current_px_color:
-            worlds.append((x, y))
-            current_px_color = pix
+    x = 1852
+    h = length - 50
+    screenshot = pag.screenshot(region=(x, 50, 1, h))  # width=1
+    col = np.array(screenshot)[:, :, :3]               # shape (h,1,3)
+    col = col.reshape(h, 3)
+
+    # Compare each pixel row to detect changes
+    diffs = np.any(col[1:] != col[:-1], axis=1)
+    change_indices = np.where(diffs)[0] + 1 + 50
 
     adjusted_worlds = []
-    top_edge = 0
-    worlds.pop(0)
-    ls = len(worlds)
+    last_y = change_indices[0]
 
-    for w, n in zip(worlds, range(1, ls + 1)):
-        if n == 1:
-            top_edge = w[1]
-            continue
-        adjusted_worlds.append((x, int(round(w[1] + top_edge)/2)))
-        top_edge = w[1]
+    for y in change_indices[1:]:
+        midpoint = int((last_y + y) / 2)
+        adjusted_worlds.append((x, midpoint))
+        last_y = y
 
     return adjusted_worlds
+
+
+def check_world_number(world, debug=False):
+    x = 1674
+    xx = 28
+    world_cords = (x, world[1] - 6)
+    screenshot = f.take_screenshot((*world_cords, xx, 10), save_img=debug, img_name='wrld_num.png')
+    w_num = de.read_digits(screenshot, number_type='w')
+    return w_num
+
+
+def check_world_population(world, debug=False):
+    x = 1711
+    xx = 28
+    world_cords = (x, world[1] - 5)
+    screenshot = f.take_screenshot((*world_cords, xx, 8), save_img=debug, img_name='world_pop.png')
+    population = de.read_digits(screenshot, debug=debug)
+    return population
 
 
 def check_world_type(world):
@@ -76,32 +91,56 @@ def check_world_type(world):
     return world_type
 
 
-def check_world_population(world):
-    templates = de.load_templates()
-    x = 1711
-    xx = 28
+def check_activity(world, debug=False):
+    x = 1753
+    y = world[1]
+    allowed_colors = np.array([(255, 255, 255), (44, 44, 44), (40, 40, 40)])
+    scr = pag.screenshot(region=(x, y-5, 15, 11))
+    if debug:
+        scr.save('activity_screenshot.png')
+    scr = np.array(scr)
+    matches_any = np.any(
+        np.all(scr[:, :, None] == allowed_colors, axis=3), axis=2)
+
+    illegal_mask = ~matches_any  # shape (8,15), True where illegal
+    # True if any illegal pixel exists
+    has_illegal = np.any(illegal_mask)
+    return "bad world" if has_illegal else "good world"
+
+
+def check_ping(world, debug=False):
+    x = 1858
+    xx = 20
     world_cords = (x, world[1] - 5)
-
-    screenshot = f.take_screenshot((*world_cords, xx, 8), save_img=True)
-
-    population = de.read_digits(screenshot)
-    return population
+    screenshot = f.take_screenshot((*world_cords, xx, 8), save_img=debug, img_name='ping.png')
+    ping = de.read_digits(screenshot)
+    return ping
 
 
-def hop_world():
-    pass
+def display_world_info(worlds, debug=False):
+    for w in worlds:
+        if check_world_type(w) == 'current':
+            continue
 
-
-def hover_options(options):
-    for world in options:
-        # pag.moveTo(*world)
-        w_type = check_world_type(world)
-        pop = check_world_population(world)
-        print('World type: ', w_type)
-        print('World population: ', pop)
+        world_num = check_world_number(w, debug)
+        print(f'World number {world_num}')
+        pop = check_world_population(w, debug)
+        print(f'World population: {pop}')
+        world_type = check_world_type(w)
+        print(f'World type: {world_type}')
+        world_activity = check_activity(w, debug)
+        print(f'World activity: {world_activity}')
+        world_ping = check_ping(w, debug)
+        print(f'World ping: {world_ping}')
         print()
-        time.sleep(.1)
 
 
-world_list = create_world_list(250)
-hover_options(world_list)
+def gen_world_list(length):
+    world_l = create_world_list(length)
+    print(f'List of {len(world_l)} worlds created')
+    print()
+    return world_l
+
+
+wl = gen_world_list(400)
+display_world_info(wl, True)

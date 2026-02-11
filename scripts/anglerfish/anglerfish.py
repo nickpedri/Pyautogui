@@ -122,10 +122,10 @@ def check_if_fishing(t=5):
     start_time = time.time()
     print('Fishing ...', end='')
     while elapsed_time < 120:
-        if pag.pixelMatchesColor(55, 55, (255, 0, 0), tolerance=t):
+        if f.check_pixel_color_in_area((55, 55, 5, 5), (255, 0, 0), tolerance=t):
             print('Not fishing!')
             break
-        elif pag.pixelMatchesColor(50, 55, (0, 255, 0), tolerance=t):
+        elif f.check_pixel_color_in_area((55, 55, 5, 5), (0, 255, 0), tolerance=t):
             print('.', end='')
             elapsed_time = time.time() - start_time
             time.sleep(4 + f.r(1, 2))
@@ -151,6 +151,7 @@ def start_fishing():
     pag.moveTo(*calculate_distance(results), f.r())
     time.sleep(f.r(0.1, 0.2))
     pag.click()
+    pag.move(f.p(100), f.p(-200, -100), f.r())
     time.sleep(5 + f.r(1, 2))
 
 
@@ -163,13 +164,13 @@ def start_fishing():
 
 
 def main(setup=False):
-    f.countdown()
+    f.countdown(1)
     f.initialize_pag()
     start_time = time.time()
     print(f'Script starting at: {datetime.datetime.now()}')
     if setup:
         set_up()
-    for n in range(1, 22):
+    for n in range(1, 17):
         full = check_inv()
         while full is False:
             start_fishing()
@@ -185,5 +186,4 @@ def main(setup=False):
 # bank_fish('bank_fish')
 main(True)
 
-# set_up()
 # bank_fish('bank_fish')

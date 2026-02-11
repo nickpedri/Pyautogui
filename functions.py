@@ -106,10 +106,13 @@ def to_pil_and_resize(cv_image, x=5, y=5, resize=True):
         return Image.fromarray(rgb_image)
 
 
-def move_click(x, y, move_duration=r(), wait_duration=r(), r1=p(), r2=p()):
+def move_click(x, y, move_duration=r(), wait_duration=r(), r1=p(), r2=p(), double_click=False):
     """ This function takes in x and y coordinates, and a movement and wait duration and executes actions."""
     pag.moveTo(x + r1, y + r2, move_duration)
-    pag.click()
+    if double_click:
+        pag.doubleClick()
+    else:
+        pag.click()
     time.sleep(wait_duration)
 
 
@@ -133,33 +136,31 @@ def find_option(option_img, xy=(100, 100), search_window=(150, 50, 300, 300), t=
     # time.sleep(5 + r())
 
 
-def check_pixel_color_in_area(search_region=(960, 540, 6, 6), target_color=(0, 255, 0), tolerance=5):
+def check_pixel_color_in_area(
+    search_region=(960, 540, 6, 6),
+    target_color=(0, 255, 0),
+    tolerance=5):
     """
-    Checks if the target color exists within the specified area of the image.
-    Args:
-        search_region (tuple): Tuple containing (top left x coordinate, top left y coordinate, width, height) of
-        the search area.
-        target_color (tuple): BGR color tuple to check for (e.g., (0, 0, 255) for red).
-        tolerance (int):
-    Returns:
-        bool: True if the color is found, False otherwise.
+    Checks if the target color exists within the specified area of the screen.
+    Same behavior as the slow pixel-by-pixel version, but much faster.
     """
-    s = search_region
-    x, y, w, h = s[0], s[1], s[2], s[3]
-    pixel_match = False
+    x, y, w, h = search_region
 
-    for pix in range(x, (x + w + 1)):
-        for p2 in range(y, (y + h + 1)):
-            pixel_match = pag.pixelMatchesColor(pix, p2, target_color, tolerance=tolerance)
-            if pixel_match:
-                break
-        if pixel_match:
-            break
+    # 1. Grabs the region ONCE (instead of calling pixelMatchesColor repeatedly)
+    img = pag.screenshot(region=(x, y, w, h))
 
-    if pixel_match:
-        return True
-    else:
-        return False
+    # 2. Convert image to NumPy array (H, W, 3)
+    arr = np.array(img)
+
+    # 3. Calculate absolute difference
+    # arr is RGB, but pyautogui.pixelMatchesColor uses RGB too
+    diff = np.abs(arr - np.array(target_color))
+
+    # 4. Check if all 3 channels are within tolerance
+    match = np.all(diff <= tolerance, axis=2)
+
+    # 5. Return True if ANY pixel matches
+    return bool(np.any(match))
 
 
 def find(locate_img, area=(0, 0, 1920, 1080), threshold=None, save_img=False, img_name='screenshot.png'):
@@ -244,33 +245,45 @@ def draw_markers(haystack, rectangles, show=True):
 
 def shift_camera_direction(direction='north', up=True):
     """ This function shifts the camera direction to a specific direction and can zoom out all the way."""
-    pag.moveTo(1725 + p(-8, 8), 52 + p(-8, 8), r(0.75, 0.90))
-    time.sleep(r(0.15, 0.80))
+    pag.moveTo(1725 + p(-8, 8), 52 + p(-8, 8), r(0.25, 0.50))
+    time.sleep(r(0.15, 0.20))
     if direction == 'north':
         pag.click()
     elif direction == 'east':
         pag.rightClick()
         time.sleep(r(0.10, 0.30))
-        pag.move(0 + p(-5, 5), 42 + p(), r(0.75, 0.90))
+        pag.move(0 + p(-5, 5), 42 + p(), r(0.15, 0.30))
         time.sleep(r(0.10, 0.30))
         pag.click()
     elif direction == 'south':
         pag.rightClick()
         time.sleep(r(0.10, 0.30))
-        pag.move(0 + p(-5, 5), 57 + p(), r(0.75, 0.90))
+        pag.move(0 + p(-5, 5), 57 + p(), r(0.15, 0.30))
         time.sleep(r(0.10, 0.30))
         pag.click()
     elif direction == 'west':
         pag.rightClick()
         time.sleep(r(0.10, 0.30))
-        pag.move(0 + p(-5, 5), 72 + p(), r(0.75, 0.90))
+        pag.move(0 + p(-5, 5), 72 + p(), r(0.15, 0.30))
         time.sleep(r(0.10, 0.30))
         pag.click()
     time.sleep(r(0.25, 1.5))
     if up:
         pag.keyDown('up')
-        time.sleep(3)
+        time.sleep(2)
         pag.keyUp('up')
+
+
+def create_inv(tl=(1683, 746), br=(1851, 998), rows=7, columns=4):
+    grid = {}
+    x = int((br[0] - tl[0]) / columns)
+    y = int((br[1] - tl[1]) / rows)
+    count = 0
+    for row in range(tl[1], br[1], y):
+        for column in range(tl[0], br[0], x):
+            count += 1
+            grid[f'Slot {count}'] = int(round(column + y/2)), int(round(row + x/2))
+    return grid
 
 
 def convert_key(key):

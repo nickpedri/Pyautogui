@@ -11,8 +11,8 @@ project_dir = os.path.dirname(__file__)
 
 
 def main():
-    for n in range(1, 312):
-        f.play_actions('clean_herbs.json', project_dir)
+    for n in range(1, 500):
+        f.play_actions('cannonballs.json', project_dir)
         time.sleep(f.r(1, 2))
         print(f'Loop {n} done!')
 

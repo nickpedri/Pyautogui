@@ -3,6 +3,7 @@ import functions as f
 import pyautogui as pag
 import cv2 as cv
 import numpy as np
+import datetime
 
 # script works at about 50% zoom
 
@@ -90,14 +91,21 @@ def calculate_distance(click_points):
 
 
 def start_fishing():
-    results = find_spots(.45)
-    results = create_rectangles(results)
-    results = find_click_spots(results)
-    pag.moveTo(*calculate_distance(results), f.r(.05, 0.10))
-    time.sleep(f.r(0.1, 0.2))
-    pag.click()
-    pag.moveTo(1000 + f.p(20), 900 + f.p(20), f.r(.25, .35))
-    time.sleep(f.r(2, 2.5))
+    for attempt in range(1, 11):
+        results = find_spots(.45)
+        results = create_rectangles(results)
+        results = find_click_spots(results)
+        if results:
+            print(results)
+            pag.moveTo(*calculate_distance(results), f.r(.05, 0.10))
+            time.sleep(f.r(0.1, 0.2))
+            pag.click()
+            pag.moveTo(1000 + f.p(20), 900 + f.p(20), f.r(.25, .35))
+            time.sleep(f.r(2, 2.5))
+            return
+        else:
+            time.sleep(f.r(2, 3))
+    raise RuntimeError(f"Failed to find fishing spot after 10 attempts")
 
 
 def check_if_fishing(t=5):
@@ -107,12 +115,12 @@ def check_if_fishing(t=5):
     while elapsed_time < 15:
         if pag.pixelMatchesColor(55, 55, (255, 0, 0), tolerance=t):
             print('Not fishing!')
-            time.sleep(f.r(1.5, 2))
+            time.sleep(f.r(1, 1.25))
             break
         elif pag.pixelMatchesColor(50, 55, (0, 255, 0), tolerance=t):
             print('.', end='')
             elapsed_time = time.time() - start_time
-            time.sleep(f.r(2, 3))
+            time.sleep(f.r(0.2, 0.3))
         else:
             print('No overlay found!')
             time.sleep(3)
@@ -134,15 +142,18 @@ def set_up():
 
 
 def main(setup=False):
+    start_time = time.time()
+    print(f'Starting script at {datetime.datetime.now()}')
     f.countdown()
     f.initialize_pag()
     if setup:
         set_up()
     loops = 0
-    while loops < 1200:
+    while loops < 1600:
         start_fishing()
         check_if_fishing()
         loops += 1
+    print(f'Script duration: {str(datetime.timedelta(seconds=time.time() - start_time))}')
 
 
 main(True)

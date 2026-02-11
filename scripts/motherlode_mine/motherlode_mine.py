@@ -33,12 +33,14 @@ def check_if_mining(t=5):
 
 
 def identify_position(t=10):
-    if f.check_pixel_color_in_area(search_region=(990, 547, 6, 6), target_color=(0, 255, 0), tolerance=5):
-        print('On blue tile.')
+    blue_tile = f.check_pixel_color_in_area(search_region=(943, 546, 6, 6), target_color=(0, 0, 255), tolerance=5)
+    green_tile = f.check_pixel_color_in_area(search_region=(943, 547, 6, 6), target_color=(0, 255, 0), tolerance=5)
+    if blue_tile:
         return 'blue'
-    else:
-        print('On green tile.')
+    if green_tile:
         return 'green'
+    else:
+        raise Exception('Not on green or blue tile. Stopping script!')
 
 
 def swap_position(current_tile=None):
@@ -53,16 +55,20 @@ def swap_position(current_tile=None):
 
 
 def mine():
-    pag.moveTo(100 + f.p(), 100 + f.p())
-    ore_available = f.check_pixel_color_in_area(search_region=(940, 474, 6, 6), target_color=(255, 255, 0), tolerance=5)
-    if not ore_available:
-        f.move_click(945, 485)
-        pag.move(f.r(-100, 100), -f.r(30, 100), f.r())
+    pag.moveTo(500 + f.p(), 300 + f.p(), f.r())
+    mining_tile = identify_position()
+    if mining_tile != 'blue' and mining_tile != 'green':
+        raise Exception('Not on green or blue tile. Stopping script!')
+    ore_available = not(f.check_pixel_color_in_area(search_region=(940, 474, 6, 6),
+                                                    target_color=(255, 255, 0), tolerance=5))
+    if ore_available:
+        f.move_click(945, 483)
+        pag.move(f.r(-100, 100), -f.r(150, 200), f.r())
         time.sleep(f.r(2, 4))
-    else:
+    if not ore_available:
         swap_position()
         f.move_click(945, 483)
-        pag.move(f.r(-100, 100), -f.r(30, 100), f.r())
+        pag.move(f.r(-100, 100), -f.r(150, 200), f.r())
         time.sleep(f.r(2, 4))
 
 
@@ -74,16 +80,34 @@ def check_inv():
     else:
         full = True
         print('Inventory full!')
+    # hopper_full = pag.pixel(41, 70) == (255, 0, 0)
+    # if hopper_full:
+    #     print('Hopper is full')
+    #     full = True
+
     return full
 
 
-def deposit_in_hopper():
+def deposit_in_hopper(n):
     position = identify_position()
     if position == 'green':
         swap_position('green')
 
     f.move_click(1051, 740)
     time.sleep(f.r(6, 7))
+    if n % 4 != 0:
+        small_fix = check_strut_from_upper()
+        if small_fix:
+            collect_ores()
+            repair_struts()
+            f.move_click(1076, 185, wait_duration=f.r(8.5, 9))
+            f.move_click(862, 320)
+            time.sleep(f.r(5, 6))  # returns to mining position after fixing struts
+        else:
+            f.move_click(887, 366)
+            time.sleep(f.r(5, 6))
+    if n % 4 == 0:
+        collect_ores()
 
 
 def check_struts():
@@ -107,24 +131,63 @@ def check_struts():
         return False
 
 
+def check_strut_from_upper():
+    n = f.find_option('hammer.png', xy=(550, 814), t=0.95, test=True, img_name='north_strut.png')
+    print('North strut is broken') if n is not None else print('North strut is not broken')
+    if n is not None:
+        return True
+    pag.move(f.r(-100, 100), f.r(-150, -250))
+    time.sleep(f.r(8, 10))
+    n1 = f.find_option('hammer.png', xy=(550,814), t=0.95, test=True, img_name='north_strut.png')
+    print('North strut is broken') if n is not None else print('North strut is not broken')
+    pag.move(f.r(-100, 100), f.r(-150, -250))
+    if n1 is not None:
+        print('Struts are broken')
+        return True
+
+    else:
+        print('No struts are broken')
+        return False
+
+
 def repair_struts():
-    pag.moveTo(1 + f.r(100, 200), 1 + f.r(100, 200))
+    pag.moveTo(1 + f.r(100, 200), 1 + f.r(100, 200), f.r())
     time.sleep(f.r(0.10, 0.20))
     f.move_click(680, 456)
     time.sleep(f.r(6, 7))
+    # moved into strut fix position
+
     s = f.find_option('hammer.png', xy=(986, 527), t=0.95)
     if s is not None:
+        s_strut = 'broken'
         f.move_click(*s)
-        print('Repairing south strut')
-        time.sleep(f.r(2, 3))
+        pag.move(f.r(-100, 100), f.r(-150, -250), f.r())
+        while s_strut == 'broken':
+            # print('Repairing south strut')
+            time.sleep(f.r(3, 4))
+            s_strut = f.find_option('hammer.png', xy=(986, 527), t=0.95)
+            pag.move(f.r(-100, 100), f.r(-150, -250), f.r())
+            if s_strut is not None:
+                s_strut = 'broken'
 
+    time.sleep(f.r(6, 7))
     f.move_click(945, 373)
     time.sleep(f.r(4, 5))
+    # moved into strut fix position
+
     n = f.find_option('hammer.png', xy=(986, 527), t=0.95)
     if n is not None:
+        n_strut = 'broken'
         f.move_click(*n)
-        print('Repairing north strut')
-        time.sleep(f.r(2, 3))
+        pag.move(f.r(-100, 100), f.r(-150, -250), f.r())
+        while n_strut == 'broken':
+            # print('Repairing south strut')
+            time.sleep(f.r(3, 4))
+            n_strut = f.find_option('hammer.png', xy=(986, 527), t=0.95)
+            pag.move(f.r(-100, 100), f.r(-150, -250), f.r())
+            if n_strut is not None:
+                n_strut = 'broken'
+
     # return to strut check tile
     f.move_click(1300, 865)
     time.sleep(f.r(8, 9))
@@ -145,30 +208,28 @@ def collect_ores():
 def main(setup=True):
     f.initialize_pag()
     start_time = time.time()  # Start timer for script
-    f.countdown(1)
+    # f.countdown(1)
     if setup:
         set_up()
+        pag.press('f2')
 
-    for n in range(1, 90):  # Number of inventories to do
+    for n in range(1, 45):  # Number of inventories to do
         full = check_inv()
         while full is False:
             mine()
             check_if_mining()
             full = check_inv()
-        deposit_in_hopper()
-
+        deposit_in_hopper(n)
         if n % 4 == 0:
-            collect_ores()
             fix = check_struts()
             if fix:
                 repair_struts()
             bank_ores()
-        else:
-            f.move_click(887, 366)
-            time.sleep(f.r(5, 6))
         print(f'Inventory {n} done at {datetime.datetime.now()}')
+        print()
 
     print(f'Script duration: {str(datetime.timedelta(seconds=time.time() - start_time))}')
 
 
 main(True)
+

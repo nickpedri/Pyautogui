@@ -8,7 +8,7 @@ import re
 project_dir = os.path.dirname(__file__)
 
 
-def create_grid(tl, br, rows, columns):
+def create_grid(tl=(1683, 746), br=(1851, 998), rows=7, columns=4):
     grid = {}
     x = int((br[0] - tl[0]) / columns)
     y = int((br[1] - tl[1]) / rows)

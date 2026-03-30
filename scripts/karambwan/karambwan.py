@@ -65,7 +65,7 @@ def main(set_up=True):
     fish_caught = 0
     start_time = time.time()
     print(f'Script starting at: {datetime.datetime.now()}')
-    for n in range(1, 80):
+    for n in range(1, 22):
         full = check_inv()
         while full is False:
             check_if_fishing()

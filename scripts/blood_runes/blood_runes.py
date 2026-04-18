@@ -2,6 +2,7 @@ import functions as f
 import pyautogui as pag
 import time
 import datetime
+import world_hopper as wh
 
 
 def setup():
@@ -19,13 +20,13 @@ def chisel():
 def check_if_mining(t=5):
     elapsed_time = 0
     start_time = time.time()
-    print('Mining ...', end='')
+    # print('Mining ...', end='')
     while elapsed_time < 120:
         if f.check_pixel_color_in_area((50, 50, 6, 6), (255, 0, 0), tolerance=t):
-            print('Not mining!')
+            # print('Not mining!')
             break
         elif f.check_pixel_color_in_area((50, 50, 6, 6), (0, 255, 0), tolerance=t):
-            print('.', end='')
+            # print('.', end='')
             elapsed_time = time.time() - start_time
             time.sleep(4 + f.r(1, 2))
         else:
@@ -36,14 +37,16 @@ def check_if_mining(t=5):
 
 def check_inv():
     if pag.pixelMatchesColor(1829, 981, (62, 53, 41), tolerance=5):
-        print('Inventory not full!')
+        # print('Inventory not full!')
         return False
     else:
-        print('Inventory full!')
+        # print('Inventory full!')
         return True
 
 
 def venerate_essence(first_trip=True):
+    if check_position() == 'green':
+        swap_position()
     f.move_click(675, 350, wait_duration=f.r(7.5, 8.5))
     f.move_click(1150, 230, wait_duration=f.r(7.0, 8.0))
     f.move_click(450, 600, wait_duration=f.r(6.7, 7.7))
@@ -54,7 +57,7 @@ def venerate_essence(first_trip=True):
         f.move_click(1335, 700, wait_duration=f.r(5.5, 6.5))
         f.move_click(1420, 500, wait_duration=f.r(8.5, 9.5))
         f.move_click(620, 955, wait_duration=f.r(5.88, 6.34))
-        f.move_click(1245, 740, wait_duration=f.r(7.5, 8.5))
+        f.move_click(1245, 740, wait_duration=f.r(8.5, 9.5))
         chisel()
     else:
         print('Second inventory done. Continuing to altar.')
@@ -71,39 +74,46 @@ def venerate_essence(first_trip=True):
         f.move_click(870, 480, wait_duration=f.r(4, 4.5))  # Bind altar 2nd time
         f.move_click(1275, 207, wait_duration=f.r(10.5, 11.5))
         f.move_click(1201, 267, wait_duration=f.r(9.5, 10.5))
-        f.move_click(1240, 520, wait_duration=f.r(5.4, 6.0))  # Return to altar
+        f.move_click(1240, 520, wait_duration=f.r(7.0, 8.0))  # Return to altar
 
 
 def check_essence(position='red'):
     if position == 'red':
         north_essence = (1000, 450)
         south_essence = (1000, 850)
+        order = [north_essence, south_essence]
     elif position == 'green':
         north_essence = (1000, 300)
         south_essence = (1010, 600)
-    n, s = False, False
-    if f.find_option('chip.png', north_essence, search_window=(150, 25, 300, 150), test=False):
+        order = [south_essence, north_essence]
+    c, far = False, False
+
+    if f.find_option('chip.png', order[0], search_window=(150, 25, 300, 150), test=False):
         pag.move(f.p(-50, 50), -f.p(100, 200), f.r(0.2, 0.3))
-        print('North essence available!')
-        n = True
-    if f.find_option('chip.png', south_essence, search_window=(150, 25, 300, 150), test=False):
+        # print('Closest essence available!')
+        c = True
+    elif f.find_option('chip.png', order[1], search_window=(150, 25, 300, 150), test=False):
         pag.move(f.p(-50, 50), -f.p(100, 200), f.r(0.2, 0.3))
-        print('South essence available!')
-        s = True
-    print(n, s)
-    return n, s
+        # print('Other essence available!')
+        far = True
+    # print(n, s)
+    return c, far
 
 
 def check_position():
-    if f.check_pixel_color_in_area((954, 544, 10, 10), (255, 0, 0), tolerance=5):
-        print('On red tile.')
-        return 'red'
-    if f.check_pixel_color_in_area((954, 544, 10, 10), (0, 255, 0), tolerance=5):
-        print('On green tile.')
-        return 'green'
-    else:
-        print('Unknown location')
-        return 'end_script'
+    attempt = 0
+    pag.move(-f.r(100, 200), -f.r(100, 200), f.r())
+    while attempt != 2:
+        if f.check_pixel_color_in_area((954, 544, 10, 10), (255, 0, 0), tolerance=5):
+            # print('On red tile.')
+            return 'red'
+        if f.check_pixel_color_in_area((954, 544, 10, 10), (0, 255, 0), tolerance=5):
+            # print('On green tile.')
+            return 'green'
+        attempt += 1
+        time.sleep(5)
+    print('Unknown location')
+    raise ValueError('Unknown location!')
 
 
 def swap_position():
@@ -116,58 +126,69 @@ def swap_position():
 
 def mine_essence():
     position = check_position()
-    n, s = check_essence(position)
+    c, far = check_essence(position)
 
     if position == 'red':
-        if n is True:
+        if c is True:
             f.move_click(1000, 430)
-            print('Mining north side.')
-        elif s is True:
+            # print('Mining north side.')
+        elif far is True:
             swap_position()
         else:
             time.sleep(f.r(5, 10))
 
     if position == 'green':
-        if s is True:
+        if c is True:
             f.move_click(1000, 600)
-            print('Mining south side.')
-        elif n is True:
+            # print('Mining south side.')
+        elif far is True:
             swap_position()
         else:
             time.sleep(f.r(5, 10))
 
     if position == 'end_script':
-        raise ValueError
+        raise ValueError('Unknown location!')
 
 
-def main(set_up=True):
+def mine_inv():
+    full = check_inv()
+    while full is False:
+        mine_essence()
+        check_if_mining()
+        full = check_inv()
+
+
+def main(set_up=True, fresh_start=True, time_cap=10):
     f.countdown(1)
     start_time = time.time()
     print(f'Script starting at: {datetime.datetime.now()}')
     if set_up:
         setup()
 
-    for n in range(1, 30):
-        full = check_inv()
-        while full is False:
-            mine_essence()
-            check_if_mining()
-            full = check_inv()
-        if check_position() == 'green':
-            swap_position()
-        venerate_essence()
-        full = check_inv()
-        while full is False:
-            mine_essence()
-            check_if_mining()
-            full = check_inv()
-        if check_position() == 'green':
-            swap_position()
+    for n in range(1, 100):
+        if fresh_start and n == 1:
+            mine_inv()
+            venerate_essence()
+        else:
+            mine_inv()
+            venerate_essence()
+        mine_inv()
         venerate_essence(first_trip=False)
+
         print(f'Trip {n} done at {datetime.datetime.now()}')
+        if time.time() - start_time > (time_cap * 3600):
+            print(f'Time cap of {time_cap} hours reached')
+            break
+
+        if n % 15 == 0:
+            pag.press('space')
+            time.sleep(2)
+            pag.press('space')
+            wh.hop_world()
+            pag.press('f2')
 
     print(f'Script ending at: {datetime.datetime.now()}')
     print(f'Script duration: {str(datetime.timedelta(seconds=time.time() - start_time))}')
 
 
-main(False)
+main(set_up=True, fresh_start=True, time_cap=11)

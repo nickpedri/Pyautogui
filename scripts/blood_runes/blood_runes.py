@@ -102,7 +102,7 @@ def check_essence(position='red'):
 
 def check_position():
     attempt = 0
-    pag.move(-f.r(100, 200), -f.r(100, 200), f.r())
+    pag.move(-f.r(300, 400), -f.r(300, 400), f.r())
     while attempt != 2:
         if f.check_pixel_color_in_area((954, 544, 10, 10), (255, 0, 0), tolerance=5):
             # print('On red tile.')

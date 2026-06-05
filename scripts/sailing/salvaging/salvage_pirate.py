@@ -69,7 +69,7 @@ def wait(wait_duration=5, area=(880, 300, 6, 6), rgb=(255, 152, 31)):
 
 
 def create_inv(n=20):
-    inventory = f.create_inv()
+    inventory = f.create_inv_grid()
     inventory = dict(list(inventory.items())[:n])
     return inventory
 

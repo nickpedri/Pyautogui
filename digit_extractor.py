@@ -46,6 +46,18 @@ def preprocess_world_number(img, save_img=False):
     return binary
 
 
+def trim_vertical_whitespace(img):
+    rows_with_black = np.where(np.any(img != 255, axis=1))[0]
+
+    if len(rows_with_black) == 0:
+        return img
+
+    top = rows_with_black[0]
+    bottom = rows_with_black[-1] + 1
+
+    return img[top:bottom, :]
+
+
 def split_connected_digits(search_img):
 
     h, w = search_img.shape
@@ -96,6 +108,9 @@ def match_single_digit(img, templates):
 
 
 def decypher_digits(img_list, templates):
+    if not img_list:
+        return None
+
     result_str = ""
     for img in img_list:
         digit = match_single_digit(img, templates)
@@ -113,7 +128,8 @@ def read_digits(img, number_type='', debug=False):
     elif number_type == 'w':
         processed = preprocess_world_number(img, save_img=debug)
 
-    digits = split_connected_digits(processed)
+    trim_img = trim_vertical_whitespace(processed)
+    digits = split_connected_digits(trim_img)
     digits = decypher_digits(digits, templates)
     return digits
 

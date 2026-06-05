@@ -1,3 +1,4 @@
 1, Start at bank tile
 2. make sure bank pin is unlocked
 3. ensure camera is set up
+4. bank should be set to mining tab with withdraw all selected

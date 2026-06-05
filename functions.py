@@ -124,6 +124,7 @@ def move_right_click(x, y, move_duration=r(), wait_duration=r(), r1=p(), r2=p())
 
 
 def find_option(option_img, xy=(100, 100), search_window=(150, 50, 300, 300), t=0.88, test=False, img_name='s'):
+
     move_right_click(*xy)
     x = xy[0] - search_window[0] if xy[0] - search_window[0] >= 0 else 0
     y = xy[1] - search_window[1] if xy[1] - search_window[1] >= 0 else 0
@@ -163,7 +164,7 @@ def check_pixel_color_in_area(
     return bool(np.any(match))
 
 
-def find(locate_img, area=(0, 0, 1920, 1080), threshold=None, save_img=False, img_name='screenshot.png'):
+def find(locate_img, area=(0, 0, 1920, 1080), threshold=0.50, save_img=False, img_name='screenshot.png'):
     """ This function takes in the name of an image file to search, and the search region, it will find the best
     match for the image within the taken screenshot. It returns the x and y coordinates for the location of the best
     match on screen."""
@@ -274,7 +275,7 @@ def shift_camera_direction(direction='north', up=True):
         pag.keyUp('up')
 
 
-def create_inv(tl=(1683, 746), br=(1851, 998), rows=7, columns=4):
+def create_inv_grid(tl=(1683, 746), br=(1851, 998), rows=7, columns=4):
     grid = {}
     x = int((br[0] - tl[0]) / columns)
     y = int((br[1] - tl[1]) / rows)
@@ -284,6 +285,12 @@ def create_inv(tl=(1683, 746), br=(1851, 998), rows=7, columns=4):
             count += 1
             grid[f'Slot {count}'] = int(round(column + y/2)), int(round(row + x/2))
     return grid
+
+
+def create_inv(n=28):
+    inventory = create_inv_grid()
+    inventory = dict(list(inventory.items())[:n])
+    return inventory
 
 
 def convert_key(key):

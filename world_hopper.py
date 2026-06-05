@@ -97,6 +97,7 @@ def visited_recently(travel_log, world_num, cooldown=1200):
 
 
 def create_world_list(length):
+    #  Creates a list of xy coordinates, each marking the centerpoint location of each world in the world tab
     world_tab('open')
     pag.moveTo(1550 + f.p(), 350 + f.p(), f.r())
 
@@ -189,33 +190,25 @@ def check_ping(world, debug=False):
 
 
 def display_world_info(worlds, debug=False):
-    if type(worlds) == list:
-        for w in worlds:
-            if check_world_type(w) == 'current':
-                continue
-            world_num = check_world_number(w, debug)
-            print(f'World number {world_num}')
-            pop = check_world_population(w, debug)
-            print(f'World population: {pop}')
-            world_type = check_world_type(w)
-            print(f'World type: {world_type}')
-            world_activity = check_activity(w, debug)
-            print(f'World activity: {world_activity}')
-            world_ping = check_ping(w, debug)
-            print(f'World ping: {world_ping}')
-            print()
-    else:
-        world_num = check_world_number(worlds, debug)
+    if type(worlds) != list:
+        worlds = [worlds]
+    for w in worlds:
+        if check_world_type(w) == 'current':
+            continue
+        world_num = check_world_number(w, debug)
         print(f'World number {world_num}')
-        pop = check_world_population(worlds, debug)
+        pop = check_world_population(w, debug)
         print(f'World population: {pop}')
-        world_type = check_world_type(worlds)
+        world_type = check_world_type(w)
         print(f'World type: {world_type}')
-        world_activity = check_activity(worlds, debug)
+        world_activity = check_activity(w, debug)
         print(f'World activity: {world_activity}')
-        world_ping = check_ping(worlds, debug)
+        world_ping = check_ping(w, debug)
         print(f'World ping: {world_ping}')
         print()
+
+
+# display_world_info(create_world_list(200), debug=False)
 
 
 def extract_world_data(world, debug=False):

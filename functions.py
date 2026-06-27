@@ -293,6 +293,40 @@ def create_inv(n=28):
     return inventory
 
 
+def full_inventory():
+    inv = create_inv(28)
+    for cx, cy in inv.values():
+        x = cx - 7
+        y = cy - 8
+        img = take_screenshot(area=(x, y, 20, 20))
+        gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        if np.std(gray) < 2 or (gray.max() - gray.min()) < 5:
+            return False  # found an empty slot
+    return True  # no empty slots found
+
+
+def slot_empty(slot=28, inv_size=28):
+    inv = create_inv(inv_size)
+    slot_xy = list(inv.items())[(slot - 1)][1]
+    # print(slot_xy)
+    x, y = slot_xy[0] - 7, slot_xy[1] - 8
+    img = take_screenshot(area=(x, y, 20, 20))
+    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    if np.std(gray) < 2 or (gray.max() - gray.min()) < 5:
+        return True  # found an empty slot
+    return False  # no empty slots found
+    # print(inv)
+
+
+def wait_until(check_function, timeout=30, interval=0.25):
+    start = time.time()
+    while not check_function():
+        if time.time() - start > timeout:
+            raise TimeoutError("Condition was not met in time.")
+        time.sleep(interval)
+    return True
+
+
 def convert_key(key):
     """ This function is a simple converter to translate pynput keys to pag readable keys"""
     key_map = {

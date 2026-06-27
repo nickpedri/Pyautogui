@@ -264,9 +264,9 @@ def main(setup=True):
 
     # Main loop --------------
     # ~144 loops per hour
-    loops = round(144 * 5.5)
+    # loops = round(144 * 3)
+    loops = round((25000-100)/27) + 1
     print(f'Starting {loops} loops!')
-
     for n in range(1, loops):
         make_steel_bars(n)
         print(f'Inventory {n} done at {datetime.datetime.now()}')
@@ -275,4 +275,4 @@ def main(setup=True):
     print(f'Script duration: {str(datetime.timedelta(seconds=time.time() - start_time))}')
 
 
-main(False)
+main(True)

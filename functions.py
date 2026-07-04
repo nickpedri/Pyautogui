@@ -16,7 +16,7 @@ def r(a=0.25, b=0.75):  # Define function and define numbers
     return random.uniform(a, b)  # Return numbers
 
 
-def p(a=3, b=None):  # Define function and define numbers
+def p(a=6, b=None):  # Define function and define numbers
     """ This function returns a random integer between a and b or -a and a, if b isn't specified"""
     if b is None:
         return random.randint(-a, a)  # Return integers
@@ -106,13 +106,29 @@ def to_pil_and_resize(cv_image, x=5, y=5, resize=True):
         return Image.fromarray(rgb_image)
 
 
-def move_click(x, y, move_duration=r(), wait_duration=r(), r1=p(), r2=p(), double_click=False):
-    """ This function takes in x and y coordinates, and a movement and wait duration and executes actions."""
+def move_click(x, y, speed='medium', move_duration=None, wait_duration=None, r1=None, r2=None, double_click=False):
+    if move_duration is None:
+        move_duration = r()
+
+    if wait_duration is None:
+        wait_duration = r(0.10, 0.25)
+
+    if r1 is None:
+        r1 = p()
+
+    if r2 is None:
+        r2 = p()
+
+    if speed == 'fast':
+        move_duration = r(0.15, 0.35)
+
     pag.moveTo(x + r1, y + r2, move_duration)
+
     if double_click:
         pag.doubleClick()
     else:
         pag.click()
+
     time.sleep(wait_duration)
 
 
@@ -135,6 +151,14 @@ def find_option(option_img, xy=(100, 100), search_window=(150, 50, 300, 300), t=
     # print(option)
     # move_click(option[0], option[1])
     # time.sleep(5 + r())
+
+
+def option_in_screenshot(haystack, option_img, threshold=0.88):
+    """Checks if option_img exists inside an already-taken screenshot.
+    Returns True or False."""
+    needle = cv.imread(option_img, cv.IMREAD_UNCHANGED)
+    result = cv.matchTemplate(haystack, needle, cv.TM_CCOEFF_NORMED)
+    return result.max() > threshold
 
 
 def check_pixel_color_in_area(
@@ -277,8 +301,18 @@ def shift_camera_direction(direction='north', up=True):
 
 def create_inv_grid(tl=(1683, 746), br=(1851, 998), rows=7, columns=4):
     grid = {}
-    x = int((br[0] - tl[0]) / columns)
-    y = int((br[1] - tl[1]) / rows)
+    column_width = (br[0] - tl[0]) / columns
+    row_height = (br[1] - tl[1]) / rows
+    if column_width % 1 != 0:
+        print(f'{br[0]} - {tl[0]} / {columns} = {column_width}')
+        print('Uneven number! Readjust grid!')
+    if row_height % 1 != 0:
+        print(f'{br[1]} - {tl[1]} / {rows} = {row_height}')
+        print('Uneven number! Readjust grid!')
+
+    x = int(column_width)
+    y = int(row_height)
+
     count = 0
     for row in range(tl[1], br[1], y):
         for column in range(tl[0], br[0], x):
@@ -316,6 +350,26 @@ def slot_empty(slot=28, inv_size=28):
         return True  # found an empty slot
     return False  # no empty slots found
     # print(inv)
+
+
+def on_tile(color):
+    colors = {'green': (0, 255, 0), 'red': (255, 0, 0), 'blue': (0, 0, 255), 'yellow': (255, 255, 0)}
+    search_area = (953, 543, 10, 10)
+    if check_pixel_color_in_area(search_area, colors[color], tolerance=1):
+        return True
+    else:
+        return False
+
+
+def is_bank_open():
+    check_1 = check_pixel_color_in_area(search_region=(593, 59, 6, 6), target_color=(255, 152, 31), tolerance=5)
+    check_2 = check_pixel_color_in_area(search_region=(1025, 827, 6, 6), target_color=(38, 250, 43), tolerance=5)
+    if check_1 and check_2:
+        # print('Bank is open!')
+        return True
+    else:
+        # print('Bank is closed!')
+        return False
 
 
 def wait_until(check_function, timeout=30, interval=0.25):

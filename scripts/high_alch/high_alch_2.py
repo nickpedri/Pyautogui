@@ -44,19 +44,19 @@ def quantify_inv(n=16):
     return quantities
 
 
-def high_alch(inventory, xy, quantity):
+def high_alch(xy, quantity):
     pag.press('f4')
     alch_spell = (1719, 877)
 
     for n in range(1, quantity + 1):
-        f.move_click(*alch_spell)
-        time.sleep(f.r(0.40, 0.60))
-        f.move_click(*xy)
+        f.move_click(*alch_spell, move_duration=f.r(0.2, 0.4))
+        # time.sleep(f.r(0.40, 0.60))
+        f.move_click(*xy, move_duration=f.r(0.2, 0.4))
         print('.', end='')
-        time.sleep(f.r(4, 5))
+        time.sleep(f.r(1.2, 1.8))
 
 
-def main(n=27):
+def main(n=26):
     f.move_click(1727, 45, move_duration=f.r(0.1, 0.15), wait_duration=f.r(0.1, 0.15))  # Click onto game screen
     inventory = quantify_inv(n)
     for slot, (count, (x, y)) in inventory.items():
@@ -64,7 +64,8 @@ def main(n=27):
         print(count)
         print(x, y)
         print(f'High alching "{slot}" {count} times', end='')
-        high_alch(inventory, slot, count)
+        high_alch((x, y), count)
         print()
 
-main(3)
+
+main(1)

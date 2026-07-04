@@ -12,6 +12,6 @@ def fletch():
     f.move_click(1705, 799, f.r(0.013, 0.027), f.r(0.002, 0.012), r1=f.p(7), r2=f.p(7))
 
 
-for n in range(1, 500):
+for n in range(1, 4330):
     fletch()
     print(n)

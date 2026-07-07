@@ -132,6 +132,12 @@ def move_click(x, y, speed='medium', move_duration=None, wait_duration=None, r1=
     time.sleep(wait_duration)
 
 
+def shift_click(x, y, wait=None):
+    pag.keyDown('shift')
+    move_click(x, y, wait_duration=wait)
+    pag.keyUp('shift')
+
+
 def move_right_click(x, y, move_duration=r(), wait_duration=r(), r1=p(), r2=p()):
     """ This function takes in x and y coordinates, and a movement and wait duration and executes actions."""
     pag.moveTo(x + r1, y + r2, move_duration)
@@ -151,6 +157,27 @@ def find_option(option_img, xy=(100, 100), search_window=(150, 50, 300, 300), t=
     # print(option)
     # move_click(option[0], option[1])
     # time.sleep(5 + r())
+
+
+def set_deposit(option, x='14'):
+    if option == 'all':
+        move_click(833, 825, 'fast')  # deposit all
+    if option == 'one':
+        move_click(680, 821, 'fast')  # withdraw one
+    if option == 'five':
+        move_click(719, 821, 'fast')  # withdraw one
+    if option == 'ten':
+        move_click(753, 821, 'fast')  # withdraw one
+    if option == 'x':
+        move_click(792, 821, 'fast')  # withdraw one
+    if option == 'custom':
+        pag.moveTo(792, 823, r(0.5, 0.75))
+        pag.rightClick()
+        pag.moveTo(792, 864, r(0.5, 0.75))
+        pag.click()
+        time.sleep(r(2, 3))
+        pag.write(x, interval=0.1)
+        pag.press('Enter')
 
 
 def option_in_screenshot(haystack, option_img, threshold=0.88):
@@ -352,8 +379,19 @@ def slot_empty(slot=28, inv_size=28):
     # print(inv)
 
 
+def wait_to_stop(area=(1683, 746, 168, 252), delay=3, tolerance=0):
+    while True:
+        img1 = take_screenshot(area)
+        time.sleep(delay)
+        img2 = take_screenshot(area)
+        difference = cv.absdiff(img1, img2)
+        if not(np.any(difference > tolerance)):
+            break
+
+
 def on_tile(color):
-    colors = {'green': (0, 255, 0), 'red': (255, 0, 0), 'blue': (0, 0, 255), 'yellow': (255, 255, 0)}
+    colors = {'green': (0, 255, 0), 'red': (255, 0, 0), 'blue': (0, 0, 255), 'yellow': (255, 255, 0),
+              'purple': (255, 0, 255)}
     search_area = (953, 543, 10, 10)
     if check_pixel_color_in_area(search_area, colors[color], tolerance=1):
         return True

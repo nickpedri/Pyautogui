@@ -15,7 +15,6 @@ def set_up():
     pag.press('f2')
 
 
-
 def enter_game():
     f.move_click(945, 285, wait_duration=f.r(10, 12))
     f.move_click(950, 354, wait_duration=f.r(2, 3))
@@ -44,7 +43,7 @@ def navigate_to_tab():
     pag.click()
 
 
-def set_deposit(option):
+def set_deposit(option, x='14'):
     if option == 'all':
         f.move_click(833, 825, 'fast')  # deposit all
     if option == 'one':
@@ -55,6 +54,14 @@ def set_deposit(option):
         f.move_click(753, 821, 'fast')  # withdraw one
     if option == 'x':
         f.move_click(792, 821, 'fast')  # withdraw one
+    if option == 'custom':
+        pag.moveTo(792, 823, f.r(0.5, 0.75))
+        pag.rightClick()
+        pag.moveTo(792, 864, f.r(0.5, 0.75))
+        pag.click()
+        time.sleep(f.r(2, 3))
+        pag.write(x, interval=0.1)
+        pag.press('Enter')
 
 
 def gear_up():
@@ -152,9 +159,9 @@ bank_guide = {'red': [(944, 291),  (944, 866)],
               '4':   [(944, 219),  (944, 665)],  # from here down, must go to red tile first to go to tile
               '5':   [(944, 184),  (944, 737)],
               '6':   [(944, 153),  (944, 818)],
-              '7':   [(1013, 155), (825, 819)],
-              '8':   [(1014, 184), (825, 737)],
-              '9':   [(1018, 216), (825, 663)],
+              '7':   [(1013, 155), (829, 819)],
+              '8':   [(1014, 184), (833, 737)],
+              '9':   [(1018, 216), (838, 663)],
               '10':  [(1025, 309), (829, 819)],
               '11':  [(1028, 351), (834, 737)],
               '12':  [(1032, 397), (838, 663)]}
@@ -268,9 +275,10 @@ def farm_run():
 
 
 def main():
-    for n in range(8):
+    for n in range(7):
         farm_run()
-        time.sleep(f.r(3500, 3700))
+        time.sleep(f.r(2500, 2700))
+        f.move_click(948, 322, wait_duration=f.r(2, 3))
 
 
 main()

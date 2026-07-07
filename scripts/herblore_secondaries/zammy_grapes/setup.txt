@@ -1,3 +1,4 @@
 1. deposit x MUST be set to 12.
 2. grape tab must be set up exactly as setup photo
 3. start at bank tile
+4. correct tile must be highlighted red

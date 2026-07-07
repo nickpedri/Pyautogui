@@ -4,8 +4,8 @@ import pyautogui as pag
 
 def process_14_14(items):
     bank = (952, 382)
-    item1 = (792, 431)
-    item2 = (888, 430)
+    item1 = (648, 646)
+    item2 = (695, 648)
 
     loops = round(items / 14)
 
@@ -24,4 +24,4 @@ def process_14_14(items):
         f.move_click(1004, 825, wait_duration=f.r(0.05, 0.1), move_duration=f.r(0.2, 0.35))
 
 
-process_14_14(447)
+process_14_14(2300)

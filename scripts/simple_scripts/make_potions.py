@@ -81,6 +81,6 @@ def make_14_potion(unf_pot, secondary, items, amulet=False):
         f.move_click(1004, 825, wait_duration=f.r(0.05, 0.1), move_duration=f.r(0.2, 0.35))
 
 
-# make_stamina_potion(2000)
+# make_stamina_potion(1500)
 
-make_14_potion((887, 576), (837, 573), 1300, False)
+make_14_potion((935, 610), (985, 610), 550, False)

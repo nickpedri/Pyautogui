@@ -59,7 +59,7 @@ def afk_but_better(duration=30, xy=[(943, 545)], frequency=[60]):
         time.sleep(0.1)
 
 
-afk_but_better(15, [(947, 471), (1788, 771)], [15, 160])
+afk(60, (1137, 600), 30)
 
 
 

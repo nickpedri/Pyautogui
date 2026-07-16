@@ -3,6 +3,7 @@ import pyautogui as pag
 import time
 import numpy as np
 import cv2 as cv
+import datetime
 
 
 character_position = 'bank'
@@ -274,11 +275,22 @@ def farm_run():
         prep_soil(s)
 
 
+def log_out():
+    f.move_click(1770, 1021)
+    f.move_click(1767, 969)
+
+
 def main():
     for n in range(7):
+        print(f'Starting grape run {n} at {datetime.datetime.now()}!')
         farm_run()
-        time.sleep(f.r(2500, 2700))
-        f.move_click(948, 322, wait_duration=f.r(2, 3))
+        print(f'Grape run {n} finished at {datetime.datetime.now()}!')
+        log_out()
+        next_run = f.r(2500, 2700)
+        next_run_time = datetime.datetime.now() + datetime.timedelta(next_run)
+        print(f'Next run at {next_run_time}!')
+        time.sleep(next_run)
+
 
 
 main()

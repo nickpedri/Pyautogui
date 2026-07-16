@@ -16,7 +16,7 @@ def r(a=0.25, b=0.75):  # Define function and define numbers
     return random.uniform(a, b)  # Return numbers
 
 
-def p(a=6, b=None):  # Define function and define numbers
+def p(a=4, b=None):  # Define function and define numbers
     """ This function returns a random integer between a and b or -a and a, if b isn't specified"""
     if b is None:
         return random.randint(-a, a)  # Return integers
@@ -178,6 +178,38 @@ def set_deposit(option, x='14'):
         time.sleep(r(2, 3))
         pag.write(x, interval=0.1)
         pag.press('Enter')
+
+
+def open_bank(bank=None):
+    if bank is None:
+        bank = (944, 561)
+    if is_bank_open():
+        return
+    move_click(*bank)
+    pin = ['7', '3', '5', '7']
+    time.sleep(r(1, 1.5))
+    if is_bank_open():
+        return None
+    for n in pin:
+        pag.press(n)
+        time.sleep(r(1, 1.5))
+    wait_until(is_bank_open)
+
+
+def identify_options(options, xy=(100, 100), search_window=(150, 50, 300, 300)):
+    move_right_click(*xy)
+    x = xy[0] - search_window[0] if xy[0] - search_window[0] >= 0 else 0
+    y = xy[1] - search_window[1] if xy[1] - search_window[1] >= 0 else 0
+
+    haystack = take_screenshot((x, y, search_window[2], search_window[3]))
+    pag.move(p(-50, 50), p(-75, -50), r(0.1, 0.2))
+    for image, status in options.items():
+        # print(image, status)
+        if option_in_screenshot(haystack, image):
+            # print(status)
+            return status  # or return message if you prefer
+    # print('No matches')
+    return None
 
 
 def option_in_screenshot(haystack, option_img, threshold=0.88):
@@ -354,6 +386,11 @@ def create_inv(n=28):
     return inventory
 
 
+def click_slot(s, duration=None, wait=None):
+    inv = list(create_inv().values())
+    move_click(*inv[s-1], move_duration=duration, wait_duration=wait)
+
+
 def full_inventory():
     inv = create_inv(28)
     for cx, cy in inv.values():
@@ -387,6 +424,42 @@ def wait_to_stop(area=(1683, 746, 168, 252), delay=3, tolerance=0):
         difference = cv.absdiff(img1, img2)
         if not(np.any(difference > tolerance)):
             break
+
+
+def wait_for_change(area=(1683, 746, 168, 252), delay=3, tolerance=0):
+    while True:
+        img1 = take_screenshot(area)
+        time.sleep(delay)
+        img2 = take_screenshot(area)
+        difference = cv.absdiff(img1, img2)
+        if np.any(difference > tolerance):
+            return
+
+
+def log_out():
+    move_click(1770, 1021)
+    move_click(1767, 969)
+    time.sleep(5)
+
+
+def logged_off():
+    check1 = pag.pixelMatchesColor(1700, 300, (0, 0, 0), tolerance=0)
+    # print(check1)
+    check2 = pag.pixelMatchesColor(1400, 900, (0, 0, 0), tolerance=0)
+    # print(check2)
+    check3 = pag.pixelMatchesColor(951, 268, (255, 255, 255), tolerance=0)
+    # print(check3)
+    # print(check1 and check2 and check3)
+
+    logged_out = check1 and check2 and check3
+    return logged_out
+
+
+def log_in():
+    if logged_off():
+        move_click(943, 287)
+        time.sleep(r(10, 12))
+        move_click(960, 355)
 
 
 def on_tile(color):

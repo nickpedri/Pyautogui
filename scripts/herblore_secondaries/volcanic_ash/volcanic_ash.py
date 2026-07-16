@@ -66,6 +66,7 @@ def mine_ash():
 
 
 def empty_inv():
+    f.move_click(975, 534, wait_duration=f.r(2, 3))
     inv = list(f.create_inv_grid().values())[8:]
     # print(inv)
     # print(len(inv))
@@ -73,14 +74,16 @@ def empty_inv():
     for xy in inv:
         f.move_click(*xy, move_duration=f.r(0.05, 0.10), r1=f.p(4), r2=f.p(4), wait_duration=f.r(0.05, 0.10))
     pag.keyUp('shift')
+    f.move_click(913, 536, wait_duration=f.r(2, 3))
 
 
 def main():
     set_up()
     for n in range(300):
         mine_ash()
-        if n % 20 == 0:
+        if n % 10 == 0:
             empty_inv()
 
 
 main()
+
